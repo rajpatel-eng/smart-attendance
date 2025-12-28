@@ -1,0 +1,58 @@
+.role-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.role-buttons button {
+    width: 30%;
+    padding: 6px 14px;
+    border-radius: 5px;
+    border: 1px solid #1f2a44;
+    background: white;
+    color: #1B263B;
+    cursor: pointer;
+    font-weight: 500;
+
+}
+
+.role-buttons button.active {
+    background-color: #1B263B;
+    color: white;
+} 
+
+a {
+    margin:1.5%;
+    text-decoration: none;
+    font-size: 12px;
+    color:#1B263B;
+    text-align: left;
+    display: block;
+
+}
+
+/* Mobile phones (<= 480px) */
+@media (max-width: 480px) {
+    
+    .box-card {
+        margin-top:50% ;
+    }
+
+    .role-buttons {
+        gap: 6px;
+    }
+
+    .role-buttons button {
+        width: 32%;
+        height: 32px;
+        font-size: 13px;
+        padding: 6px 8px;
+    }
+    a {
+        font-size: 12px;
+        text-align: left;
+        display: block;
+    }
+
+}

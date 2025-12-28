@@ -1,0 +1,170 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.box-card {
+    background: #fff;
+    width: 25%;
+    border: 1px solid #1B263B;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding-bottom: 15px;
+    text-align: center;
+}
+
+.box-header {
+    background-color: #1B263B;
+    color: white;
+    padding: 10px 0;
+    padding: 20px;
+    border-radius: 8px 8px 0 0;
+    font-weight: 600;
+    font-size: larger;
+}
+
+.box-body {
+    padding: 0 25px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-top: 15px;
+}
+
+input {
+    padding: 8px;
+    margin-top: 15px;
+    border: 1px solid #1B263B;
+    border-radius: 4px;
+}
+
+input:focus {
+    border: 2px solid #1B263B;
+}
+
+.errorbox {
+    font-size: 10px;
+    color: rgb(211, 9, 9);
+    margin: 2px;
+}
+.actions {
+    display: flex;
+    gap: 6%;
+    justify-content:center;
+    margin-top: 20px;
+}
+
+
+button.mainBtn {
+    background-color: #1f2a44;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    width: 48%;
+}
+
+button.mainBtn:hover {
+    background-color: #32456b;
+}
+
+button.mainBtn:active {
+    transform: scale(0.95);
+}
+
+button.secondBtn {
+    background-color: #9aa8bc;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    width: 48%;
+}
+
+button.secondBtn:hover {
+    background-color: #7f8ea3;
+}
+
+button.secondBtn:active {
+    transform: scale(0.95);
+}
+
+
+/* Tablets (<= 768px) */
+@media (max-width: 768px) {
+    .box-card {
+        width: 60%;
+    }
+}
+
+/* Mobile phones (<= 480px) */
+@media (max-width: 480px) {
+
+    body {
+        padding: 10px;
+        height: auto;
+    }
+
+    .box-card {
+        width: 100%;
+        max-width: 360px;
+        border-radius: 8px;
+        margin-top:30% ;
+    }
+
+    .box-header {
+        font-size: 18px;
+        padding: 15px;
+    }
+
+    .box-body {
+        padding: 0 15px;
+    }
+    input {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    button.mainBtn,
+    button.secondBtn {
+        width: 100%;
+        margin: 0;
+        padding: 10px;
+        font-size: 15px;
+    }
+
+    a {
+        font-size: 12px;
+        text-align: left;
+
+        display: block;
+    }
+
+    .errorbox {
+        font-size: 11px;
+    }
+}

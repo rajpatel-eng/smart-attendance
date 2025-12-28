@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Attendance Register</title>
+  <link rel="stylesheet" href="/css/authBase.css">
+  <link rel="stylesheet" href="/css/registerForgotPass.css">
+</head>
+<body>
+
+  <div class="box-card">
+    <div class="box-header" id="box-title">Admin Register</div>
+    <div class="box-body">
+    
+
+      <form id="registerForm">
+        <input type="text" id="userId" placeholder="Enter admin id" required>
+        <div id="errorBoxUserId" class="errorbox" ></div>
+        
+        <input type="text" id="name" placeholder="Enter your name" required>
+        <div id="errorBoxName" class="errorbox" style="display:none;"></div>
+
+        <input type="email" id="email" placeholder="Enter email id" required>
+        <div id="errorBoxEmail" class="errorbox" style="display:none;"></div>
+
+        <div class="register-otp">
+          <input type="text" id="otp" class="otpClass" placeholder="Enter OTP" required>
+          <button type="button" id="otpBtn" class="otpBtnClass">Send OTP</button>
+        </div>
+
+        <div id="errorBoxOtp" class="errorbox" style="display:none;"></div>
+
+        <input type="text" id="collegeName" placeholder="Enter college name" required>
+        <div id="errorBoxCollegeName" class="errorbox" ></div>
+
+        <input type="password" id="password" placeholder="Enter password" required>
+        <div id="errorBoxPwd" class="errorbox" ></div>
+
+        <input type="password" id="confirmPassword" placeholder="Confirm password" required>
+        <div id="errorBoxCnfmPwd" class="errorbox" ></div>
+
+        
+        <div class="actions">
+          <button type="button" class="secondBtn" id="loginBtn">Login</button>
+          <button type="button" class="mainBtn" id="registerBtn" >Register</button>
+        </div>
+       
+      </form>
+    </div>
+  </div>
+
+
+
+  <script src="/js/register.js"></script>
+
+</body>
+</html>

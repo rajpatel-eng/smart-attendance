@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Attendance Login</title>
+  <link rel="stylesheet" href="/css/authBase.css">
+  <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+
+  <div class="box-card">
+    <div class="box-header" id="box-title">Student Login</div>
+    <div class="box-body">
+      <div class="role-buttons">
+        <button id="studentBtn" class="active">Student</button>
+        <button id="teacherBtn">Teacher</button>
+        <button id="adminBtn">Admin</button>
+      </div>
+
+      <form id="loginForm">
+        <input type="text" id="userId" placeholder="Enter Student Id" required>
+        <div id="errorBoxId" class="errorbox"></div>
+
+        <input type="password" id="password" placeholder="Enter Password" required>
+        <div id="errorBoxPwd" class="errorbox"></div>
+
+      
+
+        <a href="/forgotpassword" id="forgotLink" style="display:none;">Forgot password?</a>
+
+        <div class="actions">
+          <button type="button" class="mainBtn" id="loginBtn">Login</button>
+          <button type="button" class="secondBtn" id="registerBtn" style="display:none;">Register</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/login.js"></script>
+
+</body>
+</html>
