@@ -49,18 +49,11 @@ public class AuthService {
 
         String userId = adminDto.getUserId();
         String email = adminDto.getEmail().toLowerCase();
-        String name = adminDto.getName();
-        String collegeName = adminDto.getCollegeName();
         String otp = adminDto.getOtp();
         String password = adminDto.getPassword();
         String confirmPassword = adminDto.getConfirmPassword();
         adminDto.setRole(Role.ADMIN);
 
-        if (userId == null || userId.isBlank() || email == null || email.isBlank() || name == null || name.isBlank() ||
-                collegeName == null || collegeName.isBlank() || password == null || password.isBlank() || otp == null
-                || otp.isBlank()) {
-            throw new AuthException(ErrorCode.ALL_FIELD_REQUIRED);
-        }
         if (!password.equals(confirmPassword)) {
             throw new AuthException(ErrorCode.BOTH_PASSWORD_SHOULD_BE_SAME);
         }

@@ -11,14 +11,14 @@ public class AdminMailService {
     @Autowired
     private MailSenderService mailSenderService;
 
-    public void sendStudentAccountCreatedMail(StudentDto studentDto, String adminId) {
+    public void sendStudentDetailsMail(StudentDto studentDto, String adminId,String type) {
 
         String subject = "Student Account Created – Smart Attendance System";
 
         String body =
                 "Dear " + studentDto.getName() + ",\n\n" +
 
-                "Your student account has been successfully created in the Smart Attendance System.\n\n" +
+                "Your student account has been successfully "+ type +" in the Smart Attendance System.\n\n" +
 
                 "================ ACCOUNT CREDENTIALS ================\n" +
                 "User ID   : " + studentDto.getUserId() + "\n" +
