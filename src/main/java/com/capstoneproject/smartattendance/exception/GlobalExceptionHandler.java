@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(AuthException.class)
-    public ResponseEntity<?> handleAuthException(AuthException ex) {
+    @ExceptionHandler(CustomeException.class)
+    public ResponseEntity<?> handleAuthException(CustomeException ex) {
 
         ErrorCode code = ex.getErrorCode();
 
@@ -33,8 +33,8 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleGeneral(Exception ex) {
+    @ExceptionHandler(CustomeException.class)
+    public ResponseEntity<?> handleGeneral(CustomeException ex) {
         return ResponseEntity
                 .status(ErrorCode.INTERNAL_ERROR.getStatus())
                 .body(Map.of(

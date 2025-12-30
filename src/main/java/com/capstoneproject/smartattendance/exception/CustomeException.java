@@ -1,10 +1,10 @@
 package com.capstoneproject.smartattendance.exception;
 
-public class AuthException extends RuntimeException {
+public class CustomeException extends RuntimeException {
 
     private final ErrorCode errorCode;
 
-    public AuthException(ErrorCode errorCode) {
+    public CustomeException(ErrorCode errorCode) {
         super(errorCode.getMessage()); 
         this.errorCode = errorCode;
     }

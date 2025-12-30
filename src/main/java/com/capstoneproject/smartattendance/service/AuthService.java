@@ -17,7 +17,7 @@ import com.capstoneproject.smartattendance.dto.Role;
 import com.capstoneproject.smartattendance.dto.UserDto;
 import com.capstoneproject.smartattendance.entity.Admin;
 import com.capstoneproject.smartattendance.entity.User;
-import com.capstoneproject.smartattendance.exception.AuthException;
+import com.capstoneproject.smartattendance.exception.CustomeException;
 import com.capstoneproject.smartattendance.exception.ErrorCode;
 import com.capstoneproject.smartattendance.repository.AdminRepository;
 import com.capstoneproject.smartattendance.repository.UserRepository;
@@ -55,13 +55,13 @@ public class AuthService {
         adminDto.setRole(Role.ADMIN);
 
         if (!password.equals(confirmPassword)) {
-            throw new AuthException(ErrorCode.BOTH_PASSWORD_SHOULD_BE_SAME);
+            throw new CustomeException(ErrorCode.BOTH_PASSWORD_SHOULD_BE_SAME);
         }
         if (adminRepository.findById(userId).isPresent()) {
-            throw new AuthException(ErrorCode.USERID_NOT_AVAILABLE);
+            throw new CustomeException(ErrorCode.USERID_NOT_AVAILABLE);
         }
         if (adminRepository.findByEmail(email).isPresent()) {
-            throw new AuthException(ErrorCode.EMAIL_NOT_AVAILABLE);
+            throw new CustomeException(ErrorCode.EMAIL_NOT_AVAILABLE);
         }
 
         otpService.verifyOtp(email, otp);
@@ -77,12 +77,12 @@ public class AuthService {
     public ResponseEntity<?> sendOtpService(String email) {
         try {
             if (email == null || email.isBlank()) {
-                throw new AuthException(ErrorCode.ALL_FIELD_REQUIRED);
+                throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
             }
             otpService.createOtp(email.toLowerCase());
             return ResponseEntity.ok(Map.of("message", "OTP_SENT"));
-        } catch (Exception e) {
-            throw new AuthException(ErrorCode.INTERNAL_ERROR);
+        } catch (CustomeException e) {
+            throw new CustomeException(ErrorCode.INTERNAL_ERROR);
         }
     }
 
@@ -94,17 +94,17 @@ public class AuthService {
         Role role = userDto.getRole();
 
         if (userId == null || userId.isBlank() || password == null || password.isBlank()) {
-            throw new AuthException(ErrorCode.ALL_FIELD_REQUIRED);
+            throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
         }
 
         User user = userRepository.findByUserId(userId)
-                .orElseThrow(() -> new AuthException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 
-        if (user.getRole() != role) {
-            throw new AuthException(ErrorCode.USER_NOT_FOUND); // SAME MESSAGE AS BEFORE
+        if (!user.getRole().equals(role)) {
+            throw new CustomeException(ErrorCode.USER_NOT_FOUND); // SAME MESSAGE AS BEFORE
         }
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new AuthException(ErrorCode.WRONG_PASSWORD);
+            throw new CustomeException(ErrorCode.WRONG_PASSWORD);
         }
 
         String token = jwtService.generateToken(user.getUserId(), user.getRole());
@@ -148,14 +148,14 @@ public class AuthService {
         String confirmPassword = adminDto.getConfirmPassword();
 
         if (!password.equals(confirmPassword)) {
-            throw new AuthException(ErrorCode.BOTH_PASSWORD_SHOULD_BE_SAME);
+            throw new CustomeException(ErrorCode.BOTH_PASSWORD_SHOULD_BE_SAME);
         }
 
         Admin admin = adminRepository.findById(userId)
-                .orElseThrow(() -> new AuthException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 
         if (!admin.getEmail().equals(adminDto.getEmail())) {
-            throw new AuthException(ErrorCode.EMAIL_NOT_MATCH);
+            throw new CustomeException(ErrorCode.EMAIL_NOT_MATCH);
         }
 
         otpService.verifyOtp(email, otp);

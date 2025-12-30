@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.capstoneproject.smartattendance.dto.Role;
 import com.capstoneproject.smartattendance.dto.StudentDto;
 import com.capstoneproject.smartattendance.entity.Student;
-import com.capstoneproject.smartattendance.exception.AuthException;
+import com.capstoneproject.smartattendance.exception.CustomeException;
 import com.capstoneproject.smartattendance.exception.ErrorCode;
 import com.capstoneproject.smartattendance.repository.StudentRepository;
 import com.capstoneproject.smartattendance.service.mail.AdminMailService;
@@ -36,7 +36,7 @@ public class AdminService {
         String password = studentDto.getPassword();
 
         if (studentRepository.findById(userId).isPresent()) {
-            throw new AuthException(ErrorCode.USERID_NOT_AVAILABLE);
+            throw new CustomeException(ErrorCode.USERID_NOT_AVAILABLE);
         }
 
         Student student = modelMapper.map(studentDto, Student.class);
@@ -47,17 +47,17 @@ public class AdminService {
 
         adminMailService.sendStudentDetailsMail(studentDto, adminName,"created");
         studentRepository.save(student);
-        return ResponseEntity.ok(Map.of("message", "STUDENT_ID_CREATED_SUCCESSFULLY"));
+        return ResponseEntity.ok(Map.of("message", "STUDENT_ACCOUNT_CREATED_SUCCESSFULLY"));
     }
 
     public ResponseEntity<?> updateStudentService(StudentDto studentDto,String adminName){
         String userId = studentDto.getUserId();
         String password = studentDto.getPassword();
 
-        Student prevStudent = studentRepository.findById(userId).orElseThrow(() -> new AuthException(ErrorCode.USER_NOT_FOUND));
+        Student prevStudent = studentRepository.findById(userId).orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
         
         if(!prevStudent.getManagedBy().equals(adminName)){
-            throw new AuthException(ErrorCode.YOU_CANT_UPDATE_THIS_ACCOUNT);
+            throw new CustomeException(ErrorCode.NOT_ALLOWED);
         }
 
         Student student = modelMapper.map(studentDto, Student.class);
@@ -68,10 +68,21 @@ public class AdminService {
 
         adminMailService.sendStudentDetailsMail(studentDto, adminName,"updated");
         studentRepository.save(student);
-        return ResponseEntity.ok(Map.of("message", "STUDENT_ID_UPDATED_SUCCESSFULLY"));
+        return ResponseEntity.ok(Map.of("message", "STUDENT_ACCOUNT_UPDATED_SUCCESSFULLY"));
     }
 
+    public ResponseEntity<?> deleteStudentService(String userId,String adminName){
+        
+        Student student = studentRepository.findById(userId).orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 
+        if(!student.getManagedBy().equals(adminName)){
+            throw new CustomeException(ErrorCode.NOT_ALLOWED);
+        }
+        if(!student.getRole().equals(Role.STUDENT)){
+            throw new CustomeException(ErrorCode.NOT_ALLOWED);
+        }
+        studentRepository.deleteById(userId);
+        return ResponseEntity.ok(Map.of("message", "STUDENT_ACCOUNT_DELETED_SUCCESSFULLY"));
 
-
+    }
 }

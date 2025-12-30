@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.capstoneproject.smartattendance.dto.OtpDto;
-import com.capstoneproject.smartattendance.exception.AuthException;
+import com.capstoneproject.smartattendance.exception.CustomeException;
 import com.capstoneproject.smartattendance.exception.ErrorCode;
 import com.capstoneproject.smartattendance.service.mail.AuthMailService;
 
@@ -31,8 +31,8 @@ public class OtpService {
         try {
             AuthMailService.sendOtpMail(email, otp);
             otpStore.put(email, new OtpDto(otp, expiresTime));
-        } catch (Exception e) {
-            throw new AuthException(ErrorCode.INTERNAL_ERROR);
+        } catch (CustomeException e) {
+            throw new CustomeException(ErrorCode.INTERNAL_ERROR);
         }
     }
 
@@ -40,15 +40,15 @@ public class OtpService {
         OtpDto otpDto = otpStore.get(email);
 
         if (otpDto == null) {
-            throw new AuthException(ErrorCode.NO_OTP_RECORD);
+            throw new CustomeException(ErrorCode.NO_OTP_RECORD);
         }
 
         if (Instant.now().toEpochMilli() > otpDto.getExpireTime()) {
             otpStore.remove(email);
-            throw new AuthException(ErrorCode.OTP_EXPIRED);
+            throw new CustomeException(ErrorCode.OTP_EXPIRED);
         }
         if (!otpDto.getOtp().equals(otp)) {
-            throw new AuthException(ErrorCode.INVALID_OTP);
+            throw new CustomeException(ErrorCode.INVALID_OTP);
         }
         otpStore.remove(email);
     }

@@ -17,7 +17,7 @@ public enum ErrorCode {
     
     WRONG_PASSWORD(HttpStatus.BAD_REQUEST),
     ROLE_MISMATCH(HttpStatus.BAD_REQUEST),
-    YOU_CANT_UPDATE_THIS_ACCOUNT(HttpStatus.BAD_REQUEST),
+    NOT_ALLOWED(HttpStatus.BAD_REQUEST),
 
     OTP_INVALID(HttpStatus.BAD_REQUEST),
     OTP_EXPIRED(HttpStatus.BAD_REQUEST),

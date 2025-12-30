@@ -3,6 +3,8 @@ package com.capstoneproject.smartattendance.controller;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +33,12 @@ public class AdminController {
     public ResponseEntity<?> updatestudent(@Valid @RequestBody StudentDto studentDto,Authentication authentication){
         String adminName = authentication.getName();
         return adminService.updateStudentService(studentDto,adminName);
+    }
+
+    @DeleteMapping("/deletestudent/{userId}")
+    public ResponseEntity<?> deleteStudent(@PathVariable String userId,Authentication authentication){
+        String adminName = authentication.getName();
+        return adminService.deleteStudentService(userId,adminName);
     }
     
 

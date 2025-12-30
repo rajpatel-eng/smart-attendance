@@ -5,7 +5,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import com.capstoneproject.smartattendance.exception.AuthException;
+import com.capstoneproject.smartattendance.exception.CustomeException;
 import com.capstoneproject.smartattendance.exception.ErrorCode;
 
 @Service
@@ -17,7 +17,7 @@ public class MailSenderService {
     public void sendMail(String to, String subject, String body) {
 
         if (mailSender == null) {
-            throw new AuthException(ErrorCode.MAIL_SERVICE_NOT_AVAILABLE);
+            throw new CustomeException(ErrorCode.MAIL_SERVICE_NOT_AVAILABLE);
         }
 
         try {
@@ -28,8 +28,8 @@ public class MailSenderService {
 
             mailSender.send(message);
 
-        } catch (Exception e) {
-            throw new AuthException(ErrorCode.MAIL_SEND_FAILED);
+        } catch (CustomeException e) {
+            throw new CustomeException(ErrorCode.MAIL_SEND_FAILED);
         }
     }
 }
