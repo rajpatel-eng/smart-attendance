@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.capstoneproject.smartattendance.dto.AdminDto;
 import com.capstoneproject.smartattendance.dto.StudentDto;
 import com.capstoneproject.smartattendance.service.AdminService;
 
@@ -35,11 +37,12 @@ public class AdminController {
         String adminName = authentication.getName();
         return adminService.updateAcademicStructureService(academicstructure,adminName);
     }
-    // @PutMapping("/updateadmin")
-    // public ResponseEntity<?> updateadmin(@RequestBody String academicstructure,Authentication authentication){
-    //     String adminName = authentication.getName();
-    //     return adminService.updateAcademicStructure(academicstructure,adminName);
-    // }
+
+    @PutMapping("/updateadmin")
+    public ResponseEntity<?> updateAdmin(@Valid @RequestBody AdminDto adminDto,Authentication authentication){
+        String adminName = authentication.getName();
+        return adminService.updateAdminService(adminDto,adminName);
+    }
 
     @PostMapping("/addstudent")
     public ResponseEntity<?> addStudent(@Valid @RequestBody StudentDto studentDto,Authentication authentication){

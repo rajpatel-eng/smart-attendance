@@ -22,10 +22,10 @@ public class AdminDto extends UserDto {
     @NotBlank(message = "ALL_FIELD_REQUIRED")
     private String collegeName;
 
-    @NotBlank(message = "ALL_FIELD_REQUIRED")
+    // @NotBlank(message = "ALL_FIELD_REQUIRED")
     private String otp;
     
-    @NotBlank(message = "ALL_FIELD_REQUIRED")
+    // @NotBlank(message = "ALL_FIELD_REQUIRED")
     private String confirmPassword;
 
     @Column(columnDefinition = "json")

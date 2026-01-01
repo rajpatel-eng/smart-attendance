@@ -47,7 +47,7 @@ public class AuthController {
      }
 
      @PostMapping("/forgotpassword")
-     public ResponseEntity<?> forgotPassword(@RequestBody AdminDto adminDto){
+     public ResponseEntity<?> forgotPassword(@Valid @RequestBody AdminDto adminDto){
             return authService.forgotPasswordService(adminDto);
      }
 

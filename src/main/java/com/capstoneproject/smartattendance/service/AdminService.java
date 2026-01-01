@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.capstoneproject.smartattendance.dto.AdminDto;
 import com.capstoneproject.smartattendance.dto.BasicDataDto;
 import com.capstoneproject.smartattendance.dto.Role;
 import com.capstoneproject.smartattendance.dto.StudentDto;
@@ -37,18 +38,54 @@ public class AdminService {
     @Autowired
     AdminMailService adminMailService;
 
+    @Autowired
+    OtpService otpService;
+
     public ResponseEntity<?> updateAcademicStructureService(String academicstructure, String adminName) {
-        Admin admin = adminRepository.findById(adminName).orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
+        Admin admin = adminRepository.findById(adminName)
+                .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
         admin.setAcademicStructure(academicstructure);
         adminRepository.save(admin);
         return ResponseEntity.ok(Map.of("message", "UPDATED_SUCCESSFULLY"));
     }
 
-    
     public ResponseEntity<?> getMyDetailsService(String adminName) {
-        Admin admin = adminRepository.findById(adminName).orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
-        BasicDataDto basicDataDto = modelMapper.map(admin,BasicDataDto.class);
+        Admin admin = adminRepository.findById(adminName)
+                .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
+        BasicDataDto basicDataDto = modelMapper.map(admin, BasicDataDto.class);
         return ResponseEntity.ok(basicDataDto);
+    }
+
+    public ResponseEntity<?> updateAdminService(AdminDto adminDto, String adminName) {
+        String collegeName = adminDto.getCollegeName();
+        String name = adminDto.getName();
+        String otp = adminDto.getOtp();
+        String email = adminDto.getEmail();
+        String password = adminDto.getPassword();
+        String academicStructure = adminDto.getAcademicStructure();
+
+        Admin admin = adminRepository.findById(adminName)
+                .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
+
+        if (!admin.getEmail().equals(email)) {
+            if (otp == null) {
+                throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
+            }
+            otpService.verifyOtp(email, otp);
+            admin.setEmail(email);
+        }
+
+        if (academicStructure == null || academicStructure.isBlank()) {
+            throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
+        }
+        admin.setName(name);
+        admin.setCollegeName(collegeName);
+        admin.setAcademicStructure(academicStructure);
+        admin.setPassword(passwordEncoder.encode(password));
+
+        adminRepository.save(admin);
+
+        return ResponseEntity.ok(Map.of("message", "UPDATED_SUCCESSFULLY"));
     }
 
     public ResponseEntity<?> addStudentService(StudentDto studentDto, String adminName) {
@@ -56,7 +93,6 @@ public class AdminService {
         String password = studentDto.getPassword();
 
         studentRepository.findById(userId).orElseThrow(() -> new CustomeException(ErrorCode.USERID_NOT_AVAILABLE));
-        
 
         Student student = modelMapper.map(studentDto, Student.class);
 
@@ -65,18 +101,19 @@ public class AdminService {
         student.setManagedBy(adminName);
         student.setPassword(passwordEncoder.encode(password));
 
-        adminMailService.sendStudentDetailsMail(studentDto, adminName,"created");
+        adminMailService.sendStudentDetailsMail(studentDto, adminName, "created");
         studentRepository.save(student);
         return ResponseEntity.ok(Map.of("message", "STUDENT_ACCOUNT_CREATED_SUCCESSFULLY"));
     }
 
-    public ResponseEntity<?> updateStudentService(StudentDto studentDto,String adminName){
+    public ResponseEntity<?> updateStudentService(StudentDto studentDto, String adminName) {
         String userId = studentDto.getUserId();
         String password = studentDto.getPassword();
 
-        Student prevStudent = studentRepository.findById(userId).orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
-        
-        if(!prevStudent.getManagedBy().equals(adminName)){
+        Student prevStudent = studentRepository.findById(userId)
+                .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
+
+        if (!prevStudent.getManagedBy().equals(adminName)) {
             throw new CustomeException(ErrorCode.NOT_ALLOWED);
         }
 
@@ -86,19 +123,20 @@ public class AdminService {
         student.setManagedBy(adminName);
         student.setPassword(passwordEncoder.encode(password));
 
-        adminMailService.sendStudentDetailsMail(studentDto, adminName,"updated");
+        adminMailService.sendStudentDetailsMail(studentDto, adminName, "updated");
         studentRepository.save(student);
         return ResponseEntity.ok(Map.of("message", "STUDENT_ACCOUNT_UPDATED_SUCCESSFULLY"));
     }
 
-    public ResponseEntity<?> deleteStudentService(String userId,String adminName){
-        
-        Student student = studentRepository.findById(userId).orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
+    public ResponseEntity<?> deleteStudentService(String userId, String adminName) {
 
-        if(!student.getManagedBy().equals(adminName)){
+        Student student = studentRepository.findById(userId)
+                .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
+
+        if (!student.getManagedBy().equals(adminName)) {
             throw new CustomeException(ErrorCode.NOT_ALLOWED);
         }
-        if(!student.getRole().equals(Role.STUDENT)){
+        if (!student.getRole().equals(Role.STUDENT)) {
             throw new CustomeException(ErrorCode.NOT_ALLOWED);
         }
         studentRepository.deleteById(userId);

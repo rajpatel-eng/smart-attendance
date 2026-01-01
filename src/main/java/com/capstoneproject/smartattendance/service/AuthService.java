@@ -147,6 +147,9 @@ public class AuthService {
         String password = adminDto.getPassword();
         String confirmPassword = adminDto.getConfirmPassword();
 
+        if(otp==null || confirmPassword==null){
+            throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
+        }
         if (!password.equals(confirmPassword)) {
             throw new CustomeException(ErrorCode.BOTH_PASSWORD_SHOULD_BE_SAME);
         }
