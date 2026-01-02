@@ -8,6 +8,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 
@@ -18,6 +19,7 @@ public class User {
 
     @Id
     private String userId;
+    @NotNull
     private String password;
 
     @Enumerated(EnumType.STRING) 

@@ -1,7 +1,7 @@
 package com.capstoneproject.smartattendance.security;
 
 import com.capstoneproject.smartattendance.entity.User;
-import com.capstoneproject.smartattendance.repository.UserRepository;
+import com.capstoneproject.smartattendance.repository.UserRepo;
 
 import java.util.Collections;
 
@@ -15,7 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepo userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {

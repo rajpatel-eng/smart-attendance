@@ -1,7 +1,10 @@
 package com.capstoneproject.smartattendance.dto;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Getter;
@@ -12,13 +15,16 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdminDto extends UserDto {
-
+    
+    @NotNull
     @NotBlank(message = "ALL_FIELD_REQUIRED")
     private String name;
 
+    @NotNull
     @NotBlank(message = "ALL_FIELD_REQUIRED")
     private String email;
 
+    @NotNull
     @NotBlank(message = "ALL_FIELD_REQUIRED")
     private String collegeName;
 
@@ -30,5 +36,7 @@ public class AdminDto extends UserDto {
 
     @Column(columnDefinition = "json")
     private String academicStructure;
+
+    private List<AcademicDto> academicDatas;
 
 }

@@ -1,7 +1,12 @@
 package com.capstoneproject.smartattendance.entity;
 
+import java.util.List;
+
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +25,6 @@ public class Admin extends User {
     private String name;
     private String collegeName;
 
-    @Column(columnDefinition = "json")
-    private String academicStructure;
+    @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
+    private List<Academic> academicDatas;
 }

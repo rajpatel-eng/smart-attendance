@@ -19,8 +19,8 @@ import com.capstoneproject.smartattendance.entity.Admin;
 import com.capstoneproject.smartattendance.entity.User;
 import com.capstoneproject.smartattendance.exception.CustomeException;
 import com.capstoneproject.smartattendance.exception.ErrorCode;
-import com.capstoneproject.smartattendance.repository.AdminRepository;
-import com.capstoneproject.smartattendance.repository.UserRepository;
+import com.capstoneproject.smartattendance.repository.AdminRepo;
+import com.capstoneproject.smartattendance.repository.UserRepo;
 import com.capstoneproject.smartattendance.security.JwtService;
 
 @Service
@@ -36,10 +36,10 @@ public class AuthService {
     ModelMapper modelMapper;
 
     @Autowired
-    private AdminRepository adminRepository;
+    private AdminRepo adminRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepo userRepository;
 
     @Autowired
     private JwtService jwtService;

@@ -3,6 +3,7 @@ package com.capstoneproject.smartattendance.dto;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,9 +13,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserDto {
 
+    @NotNull
     @NotBlank(message = "ALL_FIELD_REQUIRED")
     private String UserId;
 
+    @NotNull
     @NotBlank(message = "ALL_FIELD_REQUIRED")
     private String password;
 
