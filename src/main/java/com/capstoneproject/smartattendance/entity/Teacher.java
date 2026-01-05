@@ -26,6 +26,6 @@ public class Teacher extends User{
     private String collegeName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "admin_user_id", nullable = false)
+    @JoinColumn(name = "admin_id", nullable = false)
     private Admin admin;    
 }

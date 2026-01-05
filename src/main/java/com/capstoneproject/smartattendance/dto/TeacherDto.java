@@ -23,7 +23,7 @@ public class TeacherDto extends UserDto {
    private String collegeName;
 
    @NotNull(message = "ALL_FIELD_REQUIRED")
-   @Email(message = "ALL_FIELD_REQUIRED")
+   @Email(message = "IVALID_EMAIL")
    @NotBlank(message = "ALL_FIELD_REQUIRED")
    private String email;
 }

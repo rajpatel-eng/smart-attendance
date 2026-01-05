@@ -23,28 +23,33 @@ public class Student extends User {
    @Column(nullable = false)
    private String collegeName;
 
-   @Column(nullable = false)
-   private String departmentName;
+   // @Column(nullable = false)
+   // private String departmentName;
 
    @Column(nullable = false)
    private String enrollmentNo;
 
-   @Column(nullable = false)
-   private String sem;
+   // @Column(nullable = false)
+   // private String sem;
 
    @Column(nullable = false)
    private String email;
 
-   @Column(nullable = false)
-   private String className;
+   // @Column(nullable = false)
+   // private String className;
 
-   @Column(nullable = false)
-   private String batchName;
+   // @Column(nullable = false)
+   // private String batchName;
    
    @Column(nullable = false)
    private float attendance;
 
    @ManyToOne(fetch = FetchType.LAZY)
-   @JoinColumn(name = "admin_user_id", nullable = false)
+   @JoinColumn(name = "admin_id", nullable = false)
    private Admin admin;
+
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "academic_id", nullable = false)
+   private Academic academic;
+
 }

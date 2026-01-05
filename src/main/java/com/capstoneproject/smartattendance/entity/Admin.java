@@ -28,6 +28,12 @@ public class Admin extends User {
     @Column(nullable = false)
     private String collegeName;
 
-    @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Academic> academicDatas;
+
+    @OneToMany(mappedBy = "admin",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Student> students;
+
+    @OneToMany(mappedBy = "admin",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Teacher> teachers;
 }

@@ -68,11 +68,7 @@ public class AdminService {
 
         List<AcademicDto> response = academicRepo.findByAdminUserId(adminId)
                 .stream()
-                .map(a -> new AcademicDto(
-                        a.getBranch(),
-                        a.getSemester(),
-                        a.getClassName(),
-                        a.getBatch()))
+                .map(a -> modelMapper.map(a, AcademicDto.class))
                 .toList();
 
         return ResponseEntity.ok(Map.of("academicDatas", response));
@@ -181,12 +177,9 @@ public class AdminService {
 
         student.setName(studentDto.getName());
         student.setCollegeName(admin.getCollegeName());
-        student.setDepartmentName(studentDto.getDepartmentName());
         student.setEnrollmentNo(studentDto.getEnrollmentNo());
-        student.setSem(studentDto.getSem());
         student.setEmail(studentDto.getEmail());
-        student.setClassName(studentDto.getClassName());
-        student.setBatchName(studentDto.getBatchName());
+        // student.setAcademic();
         student.setPassword(passwordEncoder.encode(studentDto.getPassword()));
 
         adminMailService.sendStudentDetailsMail(studentDto, adminId, "updated");
@@ -308,9 +301,9 @@ public class AdminService {
         // List<Student> students = ;
 
         List<StudentResponseDto> response = studentRepo.findByAdminUserId(adminId)
-                                        .stream()
-                                        .map(a->modelMapper.map(a,StudentResponseDto.class))
-                                        .toList();
+                .stream()
+                .map(a -> modelMapper.map(a, StudentResponseDto.class))
+                .toList();
 
         return ResponseEntity.ok(Map.of("response", response));
     }
@@ -321,9 +314,9 @@ public class AdminService {
 
 
         List<BasicDataDto> response = teacherRepo.findByAdminUserId(adminId)
-                                      .stream()
-                                      .map(a->modelMapper.map(a,BasicDataDto.class))
-                                      .toList();
+                .stream()
+                .map(a -> modelMapper.map(a, BasicDataDto.class))
+                .toList();
 
         return ResponseEntity.ok(Map.of("response", response));
 
