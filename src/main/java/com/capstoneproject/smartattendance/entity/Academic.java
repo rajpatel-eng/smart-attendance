@@ -1,5 +1,6 @@
 package com.capstoneproject.smartattendance.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,6 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +25,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
+@Table(
+    uniqueConstraints = @UniqueConstraint(
+    columnNames = {"branch", "semester", "class_name", "batch", "admin_id"}
+  )
+)
 public class Academic {
 
     @Id
@@ -38,5 +47,6 @@ public class Academic {
     private Admin admin;
 
     @OneToMany(mappedBy = "academic", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Student> students;
+    private List<Student> students = new ArrayList<>();
+
 }

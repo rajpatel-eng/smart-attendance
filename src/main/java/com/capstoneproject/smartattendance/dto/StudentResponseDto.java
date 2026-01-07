@@ -16,10 +16,10 @@ public class StudentResponseDto{
     private String name;
     private String email;
     private String collegeName;
-    private String departmentName;
     private String enrollmentNo;
-    private String sem;
+    private String branch;
+    private String semester;
     private String className;
-    private String batchName;
+    private String batch;
     private float attendance;
 }

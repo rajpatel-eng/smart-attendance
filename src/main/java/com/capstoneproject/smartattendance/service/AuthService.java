@@ -21,6 +21,7 @@ import com.capstoneproject.smartattendance.exception.CustomeException;
 import com.capstoneproject.smartattendance.exception.ErrorCode;
 import com.capstoneproject.smartattendance.repository.AdminRepo;
 import com.capstoneproject.smartattendance.repository.UserRepo;
+import com.capstoneproject.smartattendance.security.HashUtil;
 import com.capstoneproject.smartattendance.security.JwtService;
 
 @Service
@@ -36,10 +37,10 @@ public class AuthService {
     ModelMapper modelMapper;
 
     @Autowired
-    private AdminRepo adminRepository;
+    private AdminRepo adminRepo;
 
     @Autowired
-    private UserRepo userRepository;
+    private UserRepo userRepo;
 
     @Autowired
     private JwtService jwtService;
@@ -57,10 +58,10 @@ public class AuthService {
         if (!password.equals(confirmPassword)) {
             throw new CustomeException(ErrorCode.BOTH_PASSWORD_SHOULD_BE_SAME);
         }
-        if (adminRepository.findById(userId).isPresent()) {
+        if (adminRepo.findById(userId).isPresent()) {
             throw new CustomeException(ErrorCode.USERID_NOT_AVAILABLE);
         }
-        if (adminRepository.findByEmail(email).isPresent()) {
+        if (adminRepo.findByEmail(email).isPresent()) {
             throw new CustomeException(ErrorCode.EMAIL_NOT_AVAILABLE);
         }
 
@@ -68,7 +69,7 @@ public class AuthService {
 
         adminDto.setPassword(passwordEncoder.encode(password));
         Admin admin = modelMapper.map(adminDto, Admin.class);
-        adminRepository.save(admin);
+        adminRepo.save(admin);
 
         return ResponseEntity.ok(Map.of("message", "REGISTER_SUCCESSFULLY"));
     }
@@ -97,7 +98,7 @@ public class AuthService {
             throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
         }
 
-        User user = userRepository.findByUserId(userId)
+        User user = userRepo.findByUserId(userId)
                 .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 
         if (!user.getRole().equals(role)) {
@@ -121,6 +122,8 @@ public class AuthService {
         jwtCookie.setSecure(false);
         response.addCookie(jwtCookie);
 
+        user.setJwt(HashUtil.sha256(token));
+        userRepo.save(user);
         return ResponseEntity.ok(responseBody);
     }
 
@@ -154,7 +157,7 @@ public class AuthService {
             throw new CustomeException(ErrorCode.BOTH_PASSWORD_SHOULD_BE_SAME);
         }
 
-        Admin admin = adminRepository.findById(userId)
+        Admin admin = adminRepo.findById(userId)
                 .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 
         if (!admin.getEmail().equals(adminDto.getEmail())) {
@@ -164,7 +167,7 @@ public class AuthService {
         otpService.verifyOtp(email, otp);
 
         admin.setPassword(passwordEncoder.encode(password));
-        adminRepository.save(admin);
+        adminRepo.save(admin);
 
         return ResponseEntity.ok(Map.of("message", "PASSWORD_CHANGE_SUCCESSFULLY"));
     }

@@ -15,11 +15,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepo userRepository;
+    private UserRepo userRepo;
 
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        User user = userRepository.findByUserId(userId)
+        User user = userRepo.findByUserId(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("USER_NOT_FOUND"));
 
         SimpleGrantedAuthority authority =

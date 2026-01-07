@@ -1,5 +1,6 @@
 package com.capstoneproject.smartattendance.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,11 +30,11 @@ public class Admin extends User {
     private String collegeName;
 
     @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Academic> academicDatas;
+    private List<Academic> academicDatas = new ArrayList<>();
 
     @OneToMany(mappedBy = "admin",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Student> students;
+    private List<Student> students = new ArrayList<>();
 
     @OneToMany(mappedBy = "admin",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Teacher> teachers;
+    private List<Teacher> teachers = new ArrayList<>();
 }

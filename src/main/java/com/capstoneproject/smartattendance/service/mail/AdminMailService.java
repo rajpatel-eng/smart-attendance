@@ -3,8 +3,9 @@ package com.capstoneproject.smartattendance.service.mail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.capstoneproject.smartattendance.dto.StudentDto;
-import com.capstoneproject.smartattendance.dto.TeacherDto;
+
+import com.capstoneproject.smartattendance.entity.Student;
+import com.capstoneproject.smartattendance.entity.Teacher;
 
 @Service
 public class AdminMailService {
@@ -12,27 +13,27 @@ public class AdminMailService {
     @Autowired
     private MailSenderService mailSenderService;
 
-    public void sendStudentDetailsMail(StudentDto studentDto, String adminId,String type) {
+    public void sendStudentDetailsMail(Student student, String adminId,String type) {
 
         String subject = "Student Account "+type+" – Smart Attendance System";
 
         String body =
-                "Dear " + studentDto.getName() + ",\n\n" +
+                "Dear " + student.getName() + ",\n\n" +
 
                 "Your student account has been successfully "+ type +" in the Smart Attendance System.\n\n" +
 
                 "================ ACCOUNT CREDENTIALS ================\n" +
-                "User ID   : " + studentDto.getUserId() + "\n" +
-                "Password  : " + studentDto.getPassword() + "\n\n" +
+                "User ID   : " + student.getUserId() + "\n" +
+                "Password  : " + student.getPassword() + "\n\n" +
 
                 "================ STUDENT DETAILS =====================\n" +
-                "Name           : " + studentDto.getName() + "\n" +
-                "College        : " + studentDto.getCollegeName() + "\n" +
-                "Department     : " + studentDto.getDepartmentName() + "\n" +
-                "Enrollment No  : " + studentDto.getEnrollmentNo() + "\n" +
-                "Semester       : " + studentDto.getSem() + "\n" +
-                "Class          : " + studentDto.getClassName() + "\n" +
-                "Batch          : " + studentDto.getBatchName() + "\n\n" +
+                "Name           : " + student.getName() + "\n" +
+                "College        : " + student.getCollegeName() + "\n" +
+                "Branch     : " + student.getAcademic().getBranch() + "\n" +
+                "Enrollment No  : " + student.getEnrollmentNo() + "\n" +
+                "Semester       : " + student.getAcademic().getSemester() + "\n" +
+                "Class          : " + student.getAcademic().getClassName() + "\n" +
+                "Batch          : " + student.getAcademic().getBatch() + "\n\n" +
 
                 "================ MANAGED BY ==========================\n" +
                 type +" By     : " + adminId + "\n\n" +
@@ -44,27 +45,27 @@ public class AdminMailService {
                 "Smart Attendance Team";
 
         mailSenderService.sendMail(
-                studentDto.getEmail(),
+                student.getEmail(),
                 subject,
                 body
         );
     }
 
-    public void sendTeacherDetailsMail(TeacherDto teacherDto, String adminId, String type) {
+    public void sendTeacherDetailsMail(Teacher teacher, String adminId, String type) {
        String subject = "Teacher Account "+type+" – Smart Attendance System";
 
         String body =
-                "Dear " + teacherDto.getName() + ",\n\n" +
+                "Dear " + teacher.getName() + ",\n\n" +
 
                 "Your teacher account has been successfully "+ type +" in the Smart Attendance System.\n\n" +
 
                 "================ ACCOUNT CREDENTIALS ================\n" +
-                "User ID   : " + teacherDto.getUserId() + "\n" +
-                "Password  : " + teacherDto.getPassword() + "\n\n" +
+                "User ID   : " + teacher.getUserId() + "\n" +
+                "Password  : " + teacher.getPassword() + "\n\n" +
 
                 "================ STUDENT DETAILS =====================\n" +
-                "Name           : " + teacherDto.getName() + "\n" +
-                "College        : " + teacherDto.getCollegeName() + "\n" +
+                "Name           : " + teacher.getName() + "\n" +
+                "College        : " + teacher.getCollegeName() + "\n" +
 
                 "================ MANAGED BY ==========================\n" +
                 type +" By     : " + adminId + "\n\n" +
@@ -76,7 +77,7 @@ public class AdminMailService {
                 "Smart Attendance Team";
 
         mailSenderService.sendMail(
-                teacherDto.getEmail(),
+                teacher.getEmail(),
                 subject,
                 body
         );

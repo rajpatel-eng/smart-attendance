@@ -1,6 +1,8 @@
 package com.capstoneproject.smartattendance.controller;
 
 import org.springframework.security.core.Authentication;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capstoneproject.smartattendance.dto.AcademicDto;
 import com.capstoneproject.smartattendance.dto.AdminDto;
 import com.capstoneproject.smartattendance.dto.StudentDto;
 import com.capstoneproject.smartattendance.dto.TeacherDto;
@@ -27,27 +30,32 @@ public class AdminController {
     @Autowired
     AdminService adminService;
 
-    @GetMapping("/me")
+    @GetMapping("/my")
     public ResponseEntity<?> getMyDetails(Authentication authentication){
         String adminId = authentication.getName();
         return adminService.getMyDetailsService(adminId);
     }
-
-    @PutMapping("/updateacademicstructure")
-    public ResponseEntity<?> updateAcademicStructure(@RequestBody AdminDto adminDto,Authentication authentication){
+    
+    @PostMapping("/createacademicstructure")
+    public ResponseEntity<?> createAcademicStructure(@Valid @RequestBody AcademicDto academicDto,Authentication authentication){
         String adminId = authentication.getName();
-        return adminService.updateAcademicDataService(adminDto,adminId);
+        return adminService.createAcademicDataService(academicDto,adminId);
     }
-    @GetMapping("/academicstructure")
+    
+    @PutMapping("/updateacademicstructure")
+    public ResponseEntity<?> updateAcademicStructure(@Valid @RequestBody AcademicDto academicDto,Authentication authentication){
+        String adminId = authentication.getName();
+        return adminService.updateAcademicDataService(academicDto,adminId);
+    }
+    @GetMapping("/getacademicstructure")
     public ResponseEntity<?> getAcademicStructure(Authentication authentication){
         String adminId = authentication.getName();
         return adminService.getAcademicDataService(adminId);
     }
-
     @DeleteMapping("/deleteacademicstructure")
-    public ResponseEntity<?> deleteAcademicStructure(Authentication authentication){
+    public ResponseEntity<?> deleteAcademicStructure(@RequestBody AcademicDto academicDto,Authentication authentication){
         String adminId = authentication.getName();
-        return adminService.deleteAcademicDataService(adminId);
+        return adminService.deleteAcademicDataService(academicDto,adminId);
     }
 
     @PutMapping("/updateadmin")
@@ -92,16 +100,16 @@ public class AdminController {
         return adminService.deleteTeacherService(userId,adminId);
     }
 
-    @GetMapping("/searchstudent/{userId}")
-    public ResponseEntity<?> searchStudent(@PathVariable String userId,Authentication authentication){
+    @GetMapping("/student/{userId}")
+    public ResponseEntity<?> getStudent(@PathVariable String userId,Authentication authentication){
         String adminId = authentication.getName();
-        return adminService.searchStudentService(userId,adminId);
+        return adminService.getStudentService(userId,adminId);
     }
     
-    @GetMapping("/searchteacher/{userId}")
-    public ResponseEntity<?> searchTeacher(@PathVariable String userId,Authentication authentication){
+    @GetMapping("/teacher/{userId}")
+    public ResponseEntity<?> getTeacher(@PathVariable String userId,Authentication authentication){
         String adminId = authentication.getName();
-        return adminService.searchTeacherService(userId,adminId);
+        return adminService.getTeacherService(userId,adminId);
     }
 
     @GetMapping("/allstudent")

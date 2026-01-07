@@ -1,5 +1,7 @@
 package com.capstoneproject.smartattendance.dto;
 
+import java.util.UUID;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,32 +22,13 @@ public class StudentDto extends UserDto {
 
    @NotNull(message = "ALL_FIELD_REQUIRED")
    @NotBlank(message = "ALL_FIELD_REQUIRED")
-   private String collegeName;
-
-   @NotNull(message = "ALL_FIELD_REQUIRED")
-   @NotBlank(message = "ALL_FIELD_REQUIRED")
-   private String departmentName;
-
-   @NotNull(message = "ALL_FIELD_REQUIRED")
-   @NotBlank(message = "ALL_FIELD_REQUIRED")
    private String enrollmentNo;
-
-   @NotNull(message = "ALL_FIELD_REQUIRED")
-   @NotBlank(message = "ALL_FIELD_REQUIRED")
-   private String sem;
 
    @NotNull
    @Email(message = "ALL_FIELD_REQUIRED")
    @NotBlank(message = "ALL_FIELD_REQUIRED")
    private String email;
 
-   @NotNull
-   @NotBlank(message = "ALL_FIELD_REQUIRED")
-   private String className;
+   private UUID academicId;
 
-   @NotNull
-   @NotBlank(message = "ALL_FIELD_REQUIRED")
-   private String batchName;
-
-   private float attendance;
 }

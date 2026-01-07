@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(ErrorCode.INTERNAL_ERROR.getStatus())
                 .body(Map.of(
-                        "error", ErrorCode.INTERNAL_ERROR.getMessage()
+                        "error", ex.getMessage()
                 ));
     }
 }

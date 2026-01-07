@@ -24,6 +24,10 @@ public enum ErrorCode {
     NO_OTP_RECORD(HttpStatus.BAD_REQUEST),
     INVALID_OTP(HttpStatus.BAD_REQUEST),
 
+    SAME_STRUCTURE_EXIST_ALREADY(HttpStatus.BAD_REQUEST),
+    ACADEMIC_DETAILS_NOT_FOUND(HttpStatus.BAD_REQUEST),
+    CANT_DELETE_THIS(HttpStatus.BAD_REQUEST),
+
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final HttpStatus status;
