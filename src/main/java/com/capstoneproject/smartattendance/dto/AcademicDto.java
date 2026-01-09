@@ -19,6 +19,10 @@ public class AcademicDto {
 
     @NotNull(message = "ALL_FIELD_REQUIRED")
     @NotBlank(message = "ALL_FIELD_REQUIRED")
+    private String year;
+
+    @NotNull(message = "ALL_FIELD_REQUIRED")
+    @NotBlank(message = "ALL_FIELD_REQUIRED")
     private String branch;   
 
     @NotNull(message = "ALL_FIELD_REQUIRED")

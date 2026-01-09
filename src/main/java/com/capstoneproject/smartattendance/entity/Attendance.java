@@ -1,6 +1,7 @@
 package com.capstoneproject.smartattendance.entity;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,11 +12,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,38 +24,31 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
-@Table(
-    uniqueConstraints = @UniqueConstraint(
-    columnNames = {"year","branch", "semester", "class_name", "batch", "admin_id"}
-  )
-)
-public class Academic {
-
+public class Attendance {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID academicId;
 
     @Column(nullable = false)
-    private String year;
+    private LocalDate date;
 
     @Column(nullable = false)
-    private String branch;   
+    private LocalTime time;
 
     @Column(nullable = false)
-    private String semester;
-    
-    @Column(nullable = false)
-    private String className; 
+    private String subjectName;
 
     @Column(nullable = false)
-    private String batch;
+    private String verificationCode;
+
+    @Column(nullable = false)
+    private String key;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "admin_id", nullable = false)
-    private Admin admin;
+    private Teacher teacher;
 
-    @OneToMany(mappedBy = "academic", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Student> students = new ArrayList<>();
+    @OneToMany(mappedBy = "attendance", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AttendanceRecord> attendanceRecords;
 
 }

@@ -5,14 +5,16 @@ import java.util.*;
 import java.util.function.Function;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.stereotype.Service;
 
 import com.capstoneproject.smartattendance.dto.Role;
 
 @Service
 public class JwtService {
-
-    private static final String SECRET_KEY = "smartattendancesystemSupersecurekey##capstoneproject1";
+    @Value("${security.secret.key}")
+    private String SECRET_KEY;
 
     private Key getSigningKey() {
             return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());

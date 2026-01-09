@@ -1,10 +1,15 @@
 package com.capstoneproject.smartattendance.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,4 +45,6 @@ public class Student extends User {
    @JoinColumn(name = "academic_id", nullable = false)
    private Academic academic;
 
+   @OneToMany(mappedBy = "student", fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
+   private List<AttendanceRecord> attendanceRecords = new ArrayList<>();
 }

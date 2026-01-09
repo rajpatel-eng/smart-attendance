@@ -85,6 +85,7 @@ public class AdminService {
         Academic academic = modelMapper.map(academicDto, Academic.class);
 
         boolean exists = admin.getAcademicDatas().stream().anyMatch(a ->
+            a.getYear().equalsIgnoreCase(academicDto.getYear()) &&
             a.getBranch().equalsIgnoreCase(academicDto.getBranch()) &&
             a.getSemester().equalsIgnoreCase(academicDto.getSemester()) &&
             a.getClassName().equalsIgnoreCase(academicDto.getClassName()) &&
@@ -118,7 +119,7 @@ public class AdminService {
         if (!academic.getAdmin().getUserId().equals(adminId)) {
             throw new CustomeException(ErrorCode.NOT_ALLOWED);
         }
-
+        academic.setYear(academicDto.getYear());
         academic.setBranch(academicDto.getBranch());
         academic.setSemester(academicDto.getSemester());
         academic.setClassName(academicDto.getClassName());
@@ -126,6 +127,7 @@ public class AdminService {
 
         boolean exists = admin.getAcademicDatas().stream().anyMatch(a ->
             !a.getAcademicId().equals(academicId) &&
+            a.getYear().equalsIgnoreCase(academicDto.getYear()) &&
             a.getBranch().equalsIgnoreCase(academicDto.getBranch()) &&
             a.getSemester().equalsIgnoreCase(academicDto.getSemester()) &&
             a.getClassName().equalsIgnoreCase(academicDto.getClassName()) &&
@@ -360,6 +362,7 @@ public class AdminService {
         Academic academic = student.getAcademic();
         StudentResponseDto studentResponseDto = modelMapper.map(student, StudentResponseDto.class);
 
+        studentResponseDto.setYear(academic.getYear());
         studentResponseDto.setBranch(academic.getBranch());
         studentResponseDto.setSemester(academic.getSemester());
         studentResponseDto.setClassName(academic.getClassName());
@@ -393,6 +396,7 @@ public class AdminService {
                 .stream()
                 .map(a -> {
                         StudentResponseDto studentResponseDto = modelMapper.map(a, StudentResponseDto.class);
+                        studentResponseDto.setYear(a.getAcademic().getYear());
                         studentResponseDto.setBranch(a.getAcademic().getBranch());
                         studentResponseDto.setSemester(a.getAcademic().getSemester());
                         studentResponseDto.setClassName(a.getAcademic().getClassName());

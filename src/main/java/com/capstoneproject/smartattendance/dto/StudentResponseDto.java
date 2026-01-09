@@ -17,6 +17,7 @@ public class StudentResponseDto{
     private String email;
     private String collegeName;
     private String enrollmentNo;
+    private String year;
     private String branch;
     private String semester;
     private String className;
