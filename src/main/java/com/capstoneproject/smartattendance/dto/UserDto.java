@@ -24,4 +24,8 @@ public class UserDto {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private String confirmPassword;
+
+    private String newPassword;
+
 }

@@ -27,7 +27,9 @@ public class AtteandanceResponseDto  {
     private boolean running;
 
     private List<AcademicDto> academicDatas;
-    private List<StudentDto> studentDatas;
+
+    private List<StudentResponseDto> presentDatas;
+    private List<StudentResponseDto> absentDatas;
 
 }
 

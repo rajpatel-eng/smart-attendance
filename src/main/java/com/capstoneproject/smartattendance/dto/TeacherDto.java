@@ -24,8 +24,6 @@ public class TeacherDto extends UserDto {
    @NotBlank(message = "ALL_FIELD_REQUIRED")
    private String email;
 
-   private String confirmPassword;
-
-   private String newPassword;
+   
 
 }

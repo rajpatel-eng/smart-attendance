@@ -422,25 +422,4 @@ public class AdminService {
 
     }
 
-    public ResponseEntity<?> changePasswordService(AdminDto adminDto,String adminId){
-        String password = adminDto.getPassword();
-        String newPassword = adminDto.getNewPassword();
-        String confirmPassword = adminDto.getConfirmPassword();
-
-        if(newPassword==null || newPassword.isBlank()){
-            throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
-        }
-        if(!newPassword.equals(confirmPassword)){
-            throw new CustomeException(ErrorCode.BOTH_PASSWORD_SHOULD_BE_SAME);
-        }
-        Admin admin = adminRepo.findById(adminId).orElseThrow(()->new CustomeException(ErrorCode.USER_NOT_FOUND));
-
-        if (!passwordEncoder.matches(password, admin.getPassword())) {
-            throw new CustomeException(ErrorCode.WRONG_PASSWORD);
-        }
-        admin.setPassword(passwordEncoder.encode(newPassword));
-        adminRepo.save(admin);
-        return ResponseEntity.ok(Map.of("message","PASSWORD_CHANGED_SUCCESSFULLY"));
-    }
-
 }

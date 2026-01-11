@@ -9,15 +9,16 @@ import java.util.UUID;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.capstoneproject.smartattendance.dto.AcademicDto;
+import com.capstoneproject.smartattendance.dto.AtteandanceResponseDto;
 import com.capstoneproject.smartattendance.dto.AttendanceDto;
 import com.capstoneproject.smartattendance.dto.BasicAttendanceResponseDto;
 import com.capstoneproject.smartattendance.dto.AttendanceStatus;
 import com.capstoneproject.smartattendance.dto.BasicDataDto;
 import com.capstoneproject.smartattendance.dto.StartAttendanceResponseDto;
-import com.capstoneproject.smartattendance.dto.TeacherDto;
+import com.capstoneproject.smartattendance.dto.StudentResponseDto;
 import com.capstoneproject.smartattendance.entity.Academic;
 import com.capstoneproject.smartattendance.entity.Attendance;
 import com.capstoneproject.smartattendance.entity.AttendanceAcademic;
@@ -59,9 +60,6 @@ public class TeacherService {
     ModelMapper modelMapper;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
-
-    @Autowired
     AdminService adminService;
 
     public ResponseEntity<?> getMyDetailsService(String teacherId) {
@@ -69,28 +67,6 @@ public class TeacherService {
                 .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
         BasicDataDto basicDataDto = modelMapper.map(teacher, BasicDataDto.class);
         return ResponseEntity.ok(basicDataDto);
-    }
-
-    public ResponseEntity<?> changePasswordService(TeacherDto teacherDto, String teacherId) {
-        String password = teacherDto.getPassword();
-        String newPassword = teacherDto.getNewPassword();
-        String confirmPassword = teacherDto.getConfirmPassword();
-
-        if (newPassword == null || newPassword.isBlank()) {
-            throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
-        }
-        if (!newPassword.equals(confirmPassword)) {
-            throw new CustomeException(ErrorCode.BOTH_PASSWORD_SHOULD_BE_SAME);
-        }
-        Teacher teacher = teacherRepo.findById(teacherId)
-                .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
-
-        if (!passwordEncoder.matches(password, teacher.getPassword())) {
-            throw new CustomeException(ErrorCode.WRONG_PASSWORD);
-        }
-        teacher.setPassword(passwordEncoder.encode(newPassword));
-        teacherRepo.save(teacher);
-        return ResponseEntity.ok(Map.of("message", "PASSWORD_CHANGED_SUCCESSFULLY"));
     }
 
     // create attendance
@@ -145,7 +121,9 @@ public class TeacherService {
 
     // start attendance
     public ResponseEntity<?> startAttendanceService(UUID attendanceId,String teacherId) {
-        
+        if(attendanceId==null){
+            throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
+        }
         teacherRepo.findById(teacherId)
                         .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 
@@ -161,7 +139,9 @@ public class TeacherService {
     }
     // stop attendance
     public ResponseEntity<?> stopAttendanceService(UUID attendanceId,String teacherId) {
-        
+        if(attendanceId==null){
+            throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
+        }
         teacherRepo.findById(teacherId)
                         .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 
@@ -175,6 +155,9 @@ public class TeacherService {
     }
     // add new academic
     public ResponseEntity<?> addNewAcademicInAttendanceService(UUID attendanceId,UUID academicId,String teacherId){
+        if(attendanceId==null || academicId==null){
+            throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
+        }
         teacherRepo.findById(teacherId)
                             .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 
@@ -215,6 +198,11 @@ public class TeacherService {
     }
     // remove academic
     public ResponseEntity<?> removeAcademicInAttendanceService(UUID attendanceId,UUID academicId,String teacherId){
+        
+        if(attendanceId==null || academicId==null){
+            throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
+        }
+        
         teacherRepo.findById(teacherId)
                             .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 
@@ -240,6 +228,10 @@ public class TeacherService {
     // delete attendance
     public ResponseEntity<?> deleteAttendanceService(UUID attendanceId,String teacherId) {
         
+        if(attendanceId==null){
+            throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
+        }
+
         teacherRepo.findById(teacherId)
                         .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 
@@ -265,9 +257,66 @@ public class TeacherService {
 
         return ResponseEntity.ok(Map.of("response",response));
     }
+    public ResponseEntity<?> getAttendancByAttendanceIdService(UUID attendanceId,String teacherId){
+        if(attendanceId==null){
+            throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
+        }
+        
+        teacherRepo.findById(teacherId)
+                        .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
+        
+        Attendance attendance = attendanceRepo.findByAttendanceIdAndTeacher_UserId(attendanceId, teacherId)
+                                    .orElseThrow(() -> new CustomeException(ErrorCode.ATTENDANCE_RECORD_NOT_FOUND));
+
+        List<Student> presentStudents = attendanceRecordRepo.findByAttendance_AttendanceIdAndStatus(attendanceId,AttendanceStatus.PRESENT);
+        List<Student> absentStudents = attendanceRecordRepo.findByAttendance_AttendanceIdAndStatus(attendanceId,AttendanceStatus.ABSENT);
+
+        AtteandanceResponseDto response = new AtteandanceResponseDto();
+        response.setAttendanceId(attendance.getAttendanceId());
+        response.setAttendanceDate(attendance.getAttendanceDate());
+        response.setAttendanceTime(attendance.getAttendanceTime());
+        response.setSubjectName(attendance.getSubjectName());
+        response.setRunning(attendance.isRunning());
+
+        response.setPresentDatas(presentStudents.stream()
+                                .map(s -> {
+                                    StudentResponseDto res = modelMapper.map(s, StudentResponseDto.class);
+                                    res.setYear(s.getAcademic().getYear());
+                                    res.setBranch(s.getAcademic().getBranch());
+                                    res.setSemester(s.getAcademic().getBranch());
+                                    res.setClassName(s.getAcademic().getClassName());
+                                    res.setBatch(s.getAcademic().getBatch());
+                                    return res;
+                                })
+                                .toList());
+
+        response.setAbsentDatas(absentStudents.stream()
+                                .map(s -> {
+                                    StudentResponseDto res = modelMapper.map(s, StudentResponseDto.class);
+                                    res.setYear(s.getAcademic().getYear());
+                                    res.setBranch(s.getAcademic().getBranch());
+                                    res.setSemester(s.getAcademic().getBranch());
+                                    res.setClassName(s.getAcademic().getClassName());
+                                    res.setBatch(s.getAcademic().getBatch());
+                                    return res;
+                                }).toList()
+                    );
+
+        response.setAcademicDatas(attendance.getAttendanceAcademics()
+                    .stream()
+                    .map(aa -> modelMapper.map(
+                            aa.getAcademic(), AcademicDto.class))
+                    .toList());
+
+        return ResponseEntity.ok(Map.of("response",response));
+    }
     
     public ResponseEntity<?> getAllAttendanceBySubjectNameService(String subjectName,String teacherId) {
         
+        if(subjectName==null){
+            throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
+        }
+
         teacherRepo.findById(teacherId)
                         .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 
@@ -283,7 +332,9 @@ public class TeacherService {
     }
 
     public ResponseEntity<?> getAllAttendanceByDateService(LocalDate date,String teacherId) {
-        
+        if(date==null){
+            throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
+        }
         teacherRepo.findById(teacherId)
                         .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 
@@ -299,7 +350,9 @@ public class TeacherService {
     }
 
     public ResponseEntity<?> getAllttendanceByDateAndSubjectNameService(String subjectName,LocalDate date,String teacherId) {
-        
+        if(subjectName==null || date==null){
+            throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
+        }
         teacherRepo.findById(teacherId)
                         .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 
@@ -321,7 +374,10 @@ public class TeacherService {
     }
 
     // mark presnt student in attendance
-    public ResponseEntity<?> markStudentPresentInAttendance(UUID attendanceId,String studentId,String teacherId){
+    public ResponseEntity<?> markStudentPresentInAttendanceService(UUID attendanceId,String studentId,String teacherId){
+        if(attendanceId==null || studentId==null){
+            throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
+        }
         teacherRepo.findById(teacherId)
                         .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 
@@ -329,7 +385,7 @@ public class TeacherService {
                         .orElseThrow(() -> new CustomeException(ErrorCode.ATTENDANCE_RECORD_NOT_FOUND));
 
         AttendanceRecord attendanceRecord = attendanceRecordRepo
-            .findByAttendance_AttendanceIdAndStudent_StudentId(attendanceId, studentId)
+            .findByAttendance_AttendanceIdAndStudent_UserId(attendanceId, studentId)
             .orElseThrow(() -> new CustomeException(ErrorCode.ATTENDANCE_RECORD_NOT_FOUND));
 
         attendanceRecord.setStatus(AttendanceStatus.PRESENT);
@@ -339,7 +395,11 @@ public class TeacherService {
 
     }
     // mark absent student in attendance
-    public ResponseEntity<?> markStudentAbsentInAttendance(UUID attendanceId,String studentId,String teacherId){
+    public ResponseEntity<?> markStudentAbsentInAttendanceService(UUID attendanceId,String studentId,String teacherId){
+        if(attendanceId==null || studentId==null){
+            throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
+        }
+        
         teacherRepo.findById(teacherId)
                         .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 
@@ -347,7 +407,7 @@ public class TeacherService {
                         .orElseThrow(() -> new CustomeException(ErrorCode.ATTENDANCE_RECORD_NOT_FOUND));
 
         AttendanceRecord attendanceRecord = attendanceRecordRepo
-            .findByAttendance_AttendanceIdAndStudent_StudentId(attendanceId, studentId)
+            .findByAttendance_AttendanceIdAndStudent_UserId(attendanceId, studentId)
             .orElseThrow(() -> new CustomeException(ErrorCode.ATTENDANCE_RECORD_NOT_FOUND));
 
         attendanceRecord.setStatus(AttendanceStatus.ABSENT);
