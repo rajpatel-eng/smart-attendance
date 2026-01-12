@@ -167,7 +167,7 @@ public class AdminService {
         Admin admin = adminRepo.findById(adminId)
                 .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
         BasicDataDto basicDataDto = modelMapper.map(admin, BasicDataDto.class);
-        return ResponseEntity.ok(basicDataDto);
+        return ResponseEntity.ok(Map.of("response",basicDataDto));
     }
 
     public ResponseEntity<?> updateAdminService(AdminDto adminDto, String adminId) {
