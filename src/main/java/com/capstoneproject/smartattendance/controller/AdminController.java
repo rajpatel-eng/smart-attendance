@@ -2,11 +2,14 @@ package com.capstoneproject.smartattendance.controller;
 
 import org.springframework.security.core.Authentication;
 
+import java.io.IOException;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +21,7 @@ import com.capstoneproject.smartattendance.dto.AcademicDto;
 import com.capstoneproject.smartattendance.dto.AdminDto;
 import com.capstoneproject.smartattendance.dto.StudentDto;
 import com.capstoneproject.smartattendance.dto.TeacherDto;
+import com.capstoneproject.smartattendance.dto.UserDto;
 import com.capstoneproject.smartattendance.service.AdminService;
 
 import jakarta.validation.Valid;
@@ -82,6 +86,22 @@ public class AdminController {
         return adminService.deleteStudentService(userId,adminId);
     }
 
+    @GetMapping("/allimagechangerequest")
+    public ResponseEntity<?> getAllImageChangeRequest(Authentication authentication){
+        String adminId = authentication.getName();
+        return adminService.getAllImageChangeRequestService(adminId);
+    }
+    @PatchMapping("/approveimagechangerequest")
+    public ResponseEntity<?> approveImageChangeRequest(Authentication authentication,@RequestBody UserDto userDto) throws IOException{
+        String adminId = authentication.getName();
+        String userId = userDto.getUserId();
+        return adminService.approveImageChangeRequestService(adminId,userId);
+    }
+    @DeleteMapping("/rejectimagechangerequest/{userId}")
+    public ResponseEntity<?> rejectImageChangeRequest(Authentication authentication,@PathVariable String userId) throws IOException{
+        String adminId = authentication.getName();
+        return adminService.rejectImageChangeRequestService(adminId,userId);
+    }
     @PostMapping("/addteacher")
     public ResponseEntity<?> addTeacher(@Valid @RequestBody TeacherDto teacherDto,Authentication authentication){
         String adminId = authentication.getName();

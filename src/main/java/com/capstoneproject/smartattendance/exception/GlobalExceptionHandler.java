@@ -2,10 +2,13 @@ package com.capstoneproject.smartattendance.exception;
 
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import io.jsonwebtoken.io.IOException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -38,6 +41,16 @@ public class GlobalExceptionHandler {
                 .status(ErrorCode.INTERNAL_ERROR.getStatus())
                 .body(Map.of(
                         "error", ex.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<?> handleIOException(IOException ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of(
+                        "errorCode", "IO_ERROR",
+                        "message", "File processing failed"
                 ));
     }
 }

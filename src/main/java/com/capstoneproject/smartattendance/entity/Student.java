@@ -3,6 +3,7 @@ package com.capstoneproject.smartattendance.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,6 +37,10 @@ public class Student extends User {
 
    @Column(nullable = false)
    private float attendance;
+
+   private String curImage;
+
+   private String newImage;
 
    @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "admin_id", nullable = false)

@@ -1,16 +1,23 @@
 package com.capstoneproject.smartattendance.controller;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.capstoneproject.smartattendance.service.StudentService;
 
 @RestController
-@RequestMapping("api/teacher")
+@RequestMapping("api/student")
 public class StudentController {
     @Autowired
     StudentService studentService;
@@ -25,6 +32,18 @@ public class StudentController {
     public ResponseEntity<?> getMyAllAttendance(Authentication authentication){
         String studentId = authentication.getName();
         return studentService.getMyAllAttendanceService(studentId);
+    }
+
+    @PostMapping("/changemyimage")
+    public ResponseEntity<?> changeMyImageReq(@RequestParam("image") MultipartFile image,Authentication authentication) throws IOException{
+        String studentId = authentication.getName();
+        return studentService.changeMyImageReqService(image,studentId);
+    }
+
+    @DeleteMapping("/deletechangeimagerequest")
+    public ResponseEntity<?> deleteMyImageReq(Authentication authentication) throws IOException{
+        String studentId = authentication.getName();
+        return studentService.deleteMyImageReqService(studentId);
     }
 
 

@@ -23,4 +23,6 @@ public class StudentResponseDto{
     private String className;
     private String batch;
     private float attendance;
+    private String curImage;
+    private String newImage;
 }

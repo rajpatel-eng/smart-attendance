@@ -1,11 +1,16 @@
 package com.capstoneproject.smartattendance.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -65,6 +70,9 @@ public class AdminService {
 
     @Autowired
     OtpService otpService;
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
     public ResponseEntity<?> getAcademicDataService(String adminId) {
         Admin admin = adminRepo.findById(adminId)
@@ -284,6 +292,84 @@ public class AdminService {
         }
         studentRepo.deleteById(userId);
         return ResponseEntity.ok(Map.of("message", "STUDENT_ACCOUNT_DELETED_SUCCESSFULLY"));
+    }
+
+    public ResponseEntity<?> getAllImageChangeRequestService(String adminId){
+        adminRepo.findById(adminId)
+                .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
+
+        List<Student> students = studentRepo.findByNewImageIsNotNullAndAdmin_UserId(adminId);
+
+        List<StudentResponseDto> response = students
+                                .stream()
+                                .map(s -> {
+                                    StudentResponseDto res = modelMapper.map(s, StudentResponseDto.class);
+                                    res.setYear(s.getAcademic().getYear());
+                                    res.setBranch(s.getAcademic().getBranch());
+                                    res.setSemester(s.getAcademic().getBranch());
+                                    res.setClassName(s.getAcademic().getClassName());
+                                    res.setBatch(s.getAcademic().getBatch());
+                                    return res;
+                                })
+                                .toList(); 
+        return ResponseEntity.ok(Map.of("response",response));   
+    }
+
+    public ResponseEntity<?> approveImageChangeRequestService(String adminId,String userId) throws IOException{
+        adminRepo.findById(adminId)
+                .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
+
+        Student student = studentRepo.findById(userId)
+                .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
+
+        if (!student.getAdmin().getUserId().equals(adminId)) {
+            throw new CustomeException(ErrorCode.NOT_ALLOWED);
+        }
+        if(student.getNewImage()==null){
+            throw new CustomeException(ErrorCode.NO_REQUEST_FOUND);
+        }
+
+        Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
+        Files.createDirectories(uploadPath);
+
+        if(student.getCurImage()!=null){
+            String curFile = student.getCurImage();
+            Path curPath = uploadPath.resolve(curFile).normalize();
+            Files.deleteIfExists(curPath);
+        }
+        
+        student.setCurImage(student.getNewImage());
+        student.setNewImage(null);
+        studentRepo.save(student);
+        
+        return ResponseEntity.ok(Map.of("message", "STUDENT_IMAGE_CHANGED_SUCCESSFULLY"));
+    }
+
+    public ResponseEntity<?> rejectImageChangeRequestService(String adminId,String userId) throws IOException{
+        adminRepo.findById(adminId)
+                .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
+
+        Student student = studentRepo.findById(userId)
+                .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
+
+        if (!student.getAdmin().getUserId().equals(adminId)) {
+            throw new CustomeException(ErrorCode.NOT_ALLOWED);
+        }
+        if(student.getNewImage()==null){
+            throw new CustomeException(ErrorCode.NO_REQUEST_FOUND);
+        }
+
+        Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
+        Files.createDirectories(uploadPath);
+
+        String newFile = student.getNewImage();
+        Path newPath = uploadPath.resolve(newFile).normalize();
+        Files.deleteIfExists(newPath);
+
+        student.setNewImage(null);
+        studentRepo.save(student);
+        
+        return ResponseEntity.ok(Map.of("message", "STUDENT_IMAGE_REQUEST_DELETED_SUCCESSFULLY"));
     }
 
     public ResponseEntity<?> addTeacherService(TeacherDto teacherDto, String adminId) {
