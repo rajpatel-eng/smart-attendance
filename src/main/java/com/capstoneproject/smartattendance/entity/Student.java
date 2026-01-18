@@ -35,9 +35,6 @@ public class Student extends User {
    @Column(nullable = false)
    private String email;
 
-   @Column(nullable = false)
-   private float attendance;
-
    private String curImage;
 
    private String newImage;

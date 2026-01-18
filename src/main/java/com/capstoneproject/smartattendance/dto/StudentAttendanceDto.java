@@ -18,6 +18,5 @@ public class StudentAttendanceDto {
     private String semester;
     private String className;
     private String batch;
-    private float attendance;
     private AttendanceStatus status;
 }

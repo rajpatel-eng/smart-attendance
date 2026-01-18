@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.capstoneproject.smartattendance.dto.AcademicDto;
 import com.capstoneproject.smartattendance.dto.AdminDto;
@@ -36,7 +37,7 @@ import com.capstoneproject.smartattendance.repository.UserRepo;
 
 import com.capstoneproject.smartattendance.service.mail.AdminMailService;
 
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -75,7 +76,7 @@ public class AdminService {
 
         return response;
     }
-
+    @Transactional
     public void createAcademicDataService(AcademicDto academicDto, String adminId) {
         Admin admin = adminRepo.findById(adminId)
                 .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
@@ -92,7 +93,7 @@ public class AdminService {
         );
 
         if (exists) {
-            throw new CustomeException(ErrorCode.SAME_STRUCTURE_EXIST_ALREADY);
+            throw new CustomeException(ErrorCode.ACADEMIC_ALREADY_PRESENT);
         }
 
         academic.setAdmin(admin);
@@ -101,7 +102,7 @@ public class AdminService {
         adminRepo.save(admin);  
 
     }
-
+    @Transactional
     public void updateAcademicDataService(AcademicDto academicDto, String adminId) {
         UUID academicId = academicDto.getAcademicId();
         if (academicId == null) {
@@ -111,7 +112,7 @@ public class AdminService {
                 .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 
         Academic academic = academicRepo.findById(academicId)
-                .orElseThrow(() -> new CustomeException(ErrorCode.ACADEMIC_DETAILS_NOT_FOUND));
+                .orElseThrow(() -> new CustomeException(ErrorCode.ACADEMIC_NOT_FOUND));
 
         if (!academic.getAdmin().getUserId().equals(adminId)) {
             throw new CustomeException(ErrorCode.NOT_ALLOWED);
@@ -132,7 +133,7 @@ public class AdminService {
         );
 
         if (exists) {
-            throw new CustomeException(ErrorCode.SAME_STRUCTURE_EXIST_ALREADY);
+            throw new CustomeException(ErrorCode.ACADEMIC_ALREADY_PRESENT);
         }
         academic.setAdmin(admin);
         admin.getAcademicDatas().add(academic);
@@ -150,10 +151,10 @@ public class AdminService {
                 .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 
         Academic academic = academicRepo.findById(academicId)
-                .orElseThrow(() -> new CustomeException(ErrorCode.ACADEMIC_DETAILS_NOT_FOUND));
+                .orElseThrow(() -> new CustomeException(ErrorCode.ACADEMIC_NOT_FOUND));
 
         if (academic.getStudents().size() > 0) {
-            throw new CustomeException(ErrorCode.CANT_DELETE_THIS);
+            throw new CustomeException(ErrorCode.CANT_DELETE_ACADEMIC);
         }
         academicRepo.deleteById(academicId);
     }
@@ -207,10 +208,11 @@ public class AdminService {
             throw new CustomeException(ErrorCode.USERID_NOT_AVAILABLE);
         }
 
-        Admin admin = adminRepo.findById(adminId).orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
+        Admin admin = adminRepo.findById(adminId)
+                .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 
         Academic academic = academicRepo.findById(academicId)
-                .orElseThrow(() -> new CustomeException(ErrorCode.ACADEMIC_DETAILS_NOT_FOUND));
+                .orElseThrow(() -> new CustomeException(ErrorCode.ACADEMIC_NOT_FOUND));
 
         if (!academic.getAdmin().getUserId().equals(adminId)) {
             throw new CustomeException(ErrorCode.NOT_ALLOWED);
@@ -218,11 +220,11 @@ public class AdminService {
 
         Student student = modelMapper.map(studentDto, Student.class);
 
-        student.setAttendance(0);
         student.setRole(Role.STUDENT);
         student.setAdmin(admin);
         student.setCollegeName(admin.getCollegeName());
         student.setAcademic(academic);
+        student.setCurImage("deafultimage.jpg");
         student.setPassword(passwordEncoder.encode(password));
 
         adminMailService.sendStudentDetailsMail(student, adminId, "created");
@@ -240,7 +242,7 @@ public class AdminService {
         Admin admin = adminRepo.findById(adminId)
                 .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
         Academic academic = academicRepo.findById(academicId)
-                .orElseThrow(() -> new CustomeException(ErrorCode.ACADEMIC_DETAILS_NOT_FOUND));
+                .orElseThrow(() -> new CustomeException(ErrorCode.ACADEMIC_NOT_FOUND));
 
         if (!student.getAdmin().getUserId().equals(adminId)) {
             throw new CustomeException(ErrorCode.NOT_ALLOWED);
@@ -314,7 +316,7 @@ public class AdminService {
         Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
         Files.createDirectories(uploadPath);
 
-        if(student.getCurImage()!=null){
+        if(student.getCurImage()!=null && student.getCurImage()!="defaultimage.jpg"){
             String curFile = student.getCurImage();
             Path curPath = uploadPath.resolve(curFile).normalize();
             Files.deleteIfExists(curPath);

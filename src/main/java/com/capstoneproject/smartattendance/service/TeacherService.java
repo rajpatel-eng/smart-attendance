@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.capstoneproject.smartattendance.dto.AcademicDto;
 import com.capstoneproject.smartattendance.dto.AtteandanceResponseDto;
@@ -64,6 +65,7 @@ public class TeacherService {
     }
 
     // create attendance
+    @Transactional
     public UUID createAttendanceService(AttendanceDto attendanceDto, String teacherId) {
 
         Teacher teacher = teacherRepo.findById(teacherId)
@@ -89,7 +91,7 @@ public class TeacherService {
         for (UUID academicId : attendanceDto.getAcademicIds()) {
 
             Academic academic = academicRepo.findById(academicId)
-                    .orElseThrow(() ->new CustomeException(ErrorCode.ACADEMIC_DETAILS_NOT_FOUND));
+                    .orElseThrow(() ->new CustomeException(ErrorCode.ACADEMIC_NOT_FOUND));
 
             AttendanceAcademic aa = new AttendanceAcademic();
             aa.setAttendance(attendace);
@@ -164,6 +166,7 @@ public class TeacherService {
         attendanceRepo.save(attendance);
     }
     // add new academic
+    @Transactional
     public void addNewAcademicInAttendanceService(UUID attendanceId,UUID academicId,String teacherId){
         if(attendanceId==null || academicId==null){
             throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
@@ -175,10 +178,10 @@ public class TeacherService {
                         .orElseThrow(() -> new CustomeException(ErrorCode.ATTENDANCE_RECORD_NOT_FOUND));
 
         Academic academic = academicRepo.findById(academicId)
-                    .orElseThrow(() ->new CustomeException(ErrorCode.ACADEMIC_DETAILS_NOT_FOUND));
+                    .orElseThrow(() ->new CustomeException(ErrorCode.ACADEMIC_NOT_FOUND));
 
         if (!academic.getAdmin().getUserId().equals(attendance.getTeacher().getAdmin().getUserId())) {
-            throw new CustomeException(ErrorCode.WRONG_ACADEMIC);
+            throw new CustomeException(ErrorCode.NOT_ALLOWED);
         }
 
         boolean alreadyAdded =attendanceAcademicRepo.existsByAttendance_AttendanceIdAndAcademic_AcademicId(attendanceId,academicId);
@@ -219,15 +222,15 @@ public class TeacherService {
                         .orElseThrow(() -> new CustomeException(ErrorCode.ATTENDANCE_RECORD_NOT_FOUND));
 
         Academic academic = academicRepo.findById(academicId)
-                    .orElseThrow(() ->new CustomeException(ErrorCode.ACADEMIC_DETAILS_NOT_FOUND));
+                    .orElseThrow(() ->new CustomeException(ErrorCode.ACADEMIC_NOT_FOUND));
 
         if (!academic.getAdmin().getUserId().equals(attendance.getTeacher().getAdmin().getUserId())) {
-            throw new CustomeException(ErrorCode.WRONG_ACADEMIC);
+            throw new CustomeException(ErrorCode.NOT_ALLOWED);
         }
 
         boolean alreadyAdded =attendanceAcademicRepo.existsByAttendance_AttendanceIdAndAcademic_AcademicId(attendanceId,academicId);
         if (!alreadyAdded) {
-            throw new CustomeException(ErrorCode.ACADEMIC_NOT_PRESENT);
+            throw new CustomeException(ErrorCode.ACADEMIC_ALREADY_PRESENT);
         }
         attendanceAcademicRepo.deleteByAttendance_AttendanceIdAndAcademic_AcademicId(attendanceId,academicId);
         attendanceRecordRepo.deleteByAttendance_AttendanceIdAndStudent_Academic_AcademicId(attendanceId,academicId);

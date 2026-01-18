@@ -143,7 +143,7 @@ public class StudentService {
         String decryptedCode = CryptoUtil.decrypt(encryptedCode,key);
 
         if (decryptedCode == null || !verificationCode.equals(decryptedCode)) {
-            throw new CustomeException(ErrorCode.WRONG_DATA);
+            throw new CustomeException(ErrorCode.INVALID_QR_DATA);
         }
 
         String value = attendanceId + "|" + ipAddress;

@@ -44,7 +44,7 @@ public class OtpService {
         }
 
         if (!savedOtp.equals(otp)) {
-            throw new CustomeException(ErrorCode.INVALID_OTP);
+            throw new CustomeException(ErrorCode.OTP_INVALID);
         }
 
         redisTemplate.delete(key);
