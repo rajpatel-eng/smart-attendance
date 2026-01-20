@@ -18,6 +18,7 @@ public enum ErrorCode {
     USERID_NOT_AVAILABLE(HttpStatus.BAD_REQUEST),
     EMAIL_NOT_AVAILABLE(HttpStatus.BAD_REQUEST),
     EMAIL_NOT_MATCH(HttpStatus.BAD_REQUEST),
+    TEMPORARY_BLOCKED(HttpStatus.BAD_REQUEST),
 
     // OTP
     OTP_INVALID(HttpStatus.BAD_REQUEST),

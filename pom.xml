@@ -127,6 +127,13 @@
 			<artifactId>spring-boot-starter-cache</artifactId>
 		</dependency>
 
+		<!--api call-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+
+
 
 		<!--env file-->
 		<dependency>

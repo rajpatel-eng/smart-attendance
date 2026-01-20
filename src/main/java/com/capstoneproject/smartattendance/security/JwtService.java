@@ -13,7 +13,7 @@ import com.capstoneproject.smartattendance.dto.Role;
 
 @Service
 public class JwtService {
-    @Value("${security.secret.key}")
+    @Value("${jwt.secret.key}")
     private String SECRET_KEY;
 
     private Key getSigningKey() {

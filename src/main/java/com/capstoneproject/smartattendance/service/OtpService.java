@@ -42,14 +42,14 @@ public class OtpService {
         if (savedOtp == null) {
             throw new CustomeException(ErrorCode.OTP_EXPIRED);
         }
-        String otpAttempts = redisTemplate.opsForValue().get("otpattemp:" + email);
+        String otpAttempts = redisTemplate.opsForValue().get("otpattempt:" + email);
         otpAttempts = otpAttempts!=null?otpAttempts:"";
 
         if (!savedOtp.equals(otp)) {
-            redisTemplate.opsForValue().set("otpattemp:" + email,otpAttempts+"1", OTP_TTL_SECONDS, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set("otpattempt:" + email,otpAttempts+"1", OTP_TTL_SECONDS, TimeUnit.SECONDS);
             if(otpAttempts.equals("11")){
                 redisTemplate.delete(key);
-                redisTemplate.delete("otpattemp:" + email);
+                redisTemplate.delete("otpattempt:" + email);
                 System.out.println("otp deleted");
             }
             throw new CustomeException(ErrorCode.OTP_INVALID);

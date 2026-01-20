@@ -46,6 +46,8 @@ public class AuthService {
 
     private static final long JWT_TTL = 60 * 60 * 24 * 7;
 
+    private static final long LOGIN_TTL = 60 * 2;
+
     // admin register service
     public void adminRegister(AdminDto adminDto) {
 
@@ -101,9 +103,18 @@ public class AuthService {
                 .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 
         if (!user.getRole().equals(role)) {
-            throw new CustomeException(ErrorCode.USER_NOT_FOUND); // SAME MESSAGE AS BEFORE
+            throw new CustomeException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        String attempt = redisTemplate.opsForValue().get("loginattempt:" + userId);
+        attempt = attempt!=null ? attempt : "";
+
+        if(attempt.equals("111")){
+            throw new CustomeException(ErrorCode.TEMPORARY_BLOCKED);
         }
         if (!passwordEncoder.matches(password, user.getPassword())) {
+            redisTemplate.opsForValue()
+                     .set("loginattempt:" + userId,attempt+"1",LOGIN_TTL, TimeUnit.SECONDS);
             throw new CustomeException(ErrorCode.WRONG_PASSWORD);
         }
 
