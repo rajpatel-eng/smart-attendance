@@ -1,6 +1,5 @@
 const boxTitle = document.getElementById('box-title');
 const userId = document.getElementById('userId');
-const studentBtn = document.getElementById('studentBtn');
 const teacherBtn = document.getElementById('teacherBtn');
 const adminBtn = document.getElementById('adminBtn');
 const forgotLink = document.getElementById('forgotLink');
@@ -9,23 +8,13 @@ const registerBtn = document.getElementById('registerBtn');
 const errorBoxId = document.getElementById('errorBoxId');
 const errorBoxPwd = document.getElementById('errorBoxPwd');
 
-let role = 'student';
+let role = 'teacher';
 
 function setRole(role) {
 
-    [studentBtn, teacherBtn, adminBtn].forEach(btn => btn.classList.remove('active'));
+    [teacherBtn, adminBtn].forEach(btn => btn.classList.remove('active'));
 
-    if (role === 'student') {
-        studentBtn.classList.add('active');
-        boxTitle.textContent = 'Student Login';
-        userId.placeholder = 'Enter Student Id';
-        forgotLink.style.display = 'none';
-        registerBtn.style.display = 'none';
-        errorBoxId.style.display = 'none'
-        errorBoxId.textContent = "";
-        errorBoxPwd.style.display = 'none'
-        errorBoxPwd.textContent = "";
-    } else if (role === 'teacher') {
+    if (role === 'teacher') {
         teacherBtn.classList.add('active');
         boxTitle.textContent = 'Teacher Login';
         userId.placeholder = 'Enter Teacher Id';
@@ -54,7 +43,6 @@ registerBtn.addEventListener('click', () => {
     window.location.href = "/register";
 });
 
-studentBtn.addEventListener('click', () => setRole(role = 'student'));
 teacherBtn.addEventListener('click', () => setRole(role = 'teacher'));
 adminBtn.addEventListener('click', () => setRole(role = 'admin'));
 
@@ -105,26 +93,33 @@ async function login() {
             localStorage.setItem("jwtToken", data.token);
             localStorage.setItem("role", data.role);
             localStorage.setItem("username", data.username);
+            
+            showSnackbar("Login successful", "success");
 
-            if (data.role === 'ADMIN') {
-                window.location.href = "/admin/dashboard";
-            }
-
+            setTimeout(() => {
+                if (data.role === 'ADMIN') {
+                    window.location.href = "/admin/dashboard";
+                }else if(data.role === 'TEACHER'){
+                    window.location.href = "/teacher/dashboard";
+                }
+            }, 1000);
+            
         } else {
             if (data.error === "USER_NOT_FOUND") {
                 errorBoxId.style.display = 'block';
                 errorBoxId.textContent = "User Id not found";
             }
-            else if (data.error === "PASSWORD_NOT_MATCH") {
+            else if (data.error === "WRONG_PASSWORD") {
                 errorBoxPwd.style.display = 'block';
                 errorBoxPwd.textContent = "Wrong password";
+            }
+            else if (data.error === "TEMPORARY_BLOCKED") {
+                showSnackbar("Account temporarily blocked try after 2 min", "warning");
             }
         }
 
     } catch (error) {
-        alert("error:", error);
-        errorBoxPwd.style.display = 'block';
-        errorBoxPwd.textContent = "Connection error!";
+        showSnackbar("Something went wrong. Try again", "error"); 
     }
 }
 

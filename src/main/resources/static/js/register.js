@@ -75,16 +75,15 @@ otpBtn.addEventListener('click', async () => {
         if (response.ok) {
             errorBoxOtp.style.display = "none";
             otpBtn.textContent = "Resend OTP";
+            showSnackbar("OTP sent successfully", "success");
             clearInterval(interval);
             startOtpTimer();
         } else {
-            errorBoxEmail.textContent = "Failed to send OTP";
-            errorBoxEmail.style.display = "block";
+            showSnackbar("Failed to send OTP. Try again", "warning");
             otpBtn.textContent = "Send OTP";
         }
     } catch (err) {
-        errorBoxOtp.textContent = "Network error";
-        errorBoxOtp.style.display = "block";
+        showSnackbar("Failed to send OTP. Try again", "warning");
         otpBtn.textContent = "Send OTP";
     }
 
@@ -164,12 +163,16 @@ registerBtn.addEventListener('click', async () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(userData)
         });
+        
+
 
         const data = await response.json();
 
         if (response.ok) {
-            alert("Registration Successful!");
-            window.location.href = "/login";
+            showSnackbar("Registration successfull", "success");
+            setTimeout(() => {
+                window.location.href = "/login";
+            }, 1000);
         } else {
             console.log(data.error)
             switch (data.error) {
@@ -179,23 +182,19 @@ registerBtn.addEventListener('click', async () => {
                 case "EMAIL_NOT_AVAILABLE":
                     errorBoxEmail.textContent = "Please try different email";
                     break;
-                case "NO_OTP_RECORD":
-                    errorBoxOtp.textContent = "Please send OTP first";
-                    break;
                 case "OTP_EXPIRED":
                     errorBoxOtp.textContent = "OTP expired! please send again";
                     break;
-                case "INVALID_OTP":
+                case "OTP_INVALID":
                     errorBoxOtp.textContent = "Wrong OTP";
                     break;
                 default:
-                    alert("Server error please try again");
-                    console.log(data.error);
+                    showSnackbar("Something went wrong. Try again", "warning");
             }
         }
 
     } catch (err) {
-        alert("Sorry for truble server not response")
+        showSnackbar("Something went wrong. Try again", "error");
     }
 
     registerBtn.textContent = "Register";

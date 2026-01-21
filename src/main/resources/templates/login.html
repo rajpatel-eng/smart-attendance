@@ -1,31 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart Attendance Login</title>
+  <link rel="stylesheet" href="/css/colors.css">
   <link rel="stylesheet" href="/css/authBase.css">
   <link rel="stylesheet" href="/css/login.css">
+  <link rel="stylesheet" href="/css/snackbar.css">
+
 </head>
+
 <body>
+  <div class="logo-card">
+    <div class="logo-image">
+      <img src="/assets/images/website-logo.png">
+    </div>
+    <div class="logo-text">
+      <h1>Smart Attendance</h1>
+      <p>The future of classroom attendance.</p>
+    </div>
+  </div>
+
 
   <div class="box-card">
-    <div class="box-header" id="box-title">Student Login</div>
+    <div class="box-header" id="box-title">Teacher Login</div>
     <div class="box-body">
       <div class="role-buttons">
-        <button id="studentBtn" class="active">Student</button>
-        <button id="teacherBtn">Teacher</button>
+        <button id="teacherBtn" class="active">Teacher</button>
         <button id="adminBtn">Admin</button>
       </div>
 
       <form id="loginForm">
-        <input type="text" id="userId" placeholder="Enter Student Id" required>
+        <input type="text" id="userId" placeholder="Enter Teacher Id" required>
         <div id="errorBoxId" class="errorbox"></div>
 
-        <input type="password" id="password" placeholder="Enter Password" required>
+        <div class="password-wrapper">
+          <input type="password" id="password" placeholder="Enter password" required>
+          <span class="password-toggle" onclick="togglePassword('password', this)">
+            <img src="/assets/icons/eye.svg" class="eye-icon" alt="toggle password">
+          </span>
+        </div>
+
         <div id="errorBoxPwd" class="errorbox"></div>
 
-      
+
 
         <a href="/forgotpassword" id="forgotLink" style="display:none;">Forgot password?</a>
 
@@ -38,6 +58,11 @@
   </div>
 
   <script src="/js/login.js"></script>
+  <script src="/js/snackbar.js"></script>
+  <script src="/js/password-toggle.js"></script>
+
+
 
 </body>
+
 </html>
