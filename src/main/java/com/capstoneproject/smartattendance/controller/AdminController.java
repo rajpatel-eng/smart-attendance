@@ -171,4 +171,10 @@ public class AdminController {
         return ResponseEntity.ok(Map.of("response", response));
     }
 
+    @DeleteMapping("/allattendance")
+    public ResponseEntity<?> deleteAllAttendance(Authentication authentication,@RequestBody String otp){
+        String adminId = authentication.getName();
+        adminService.deleteAllAttendanceService(adminId,otp);
+        return ResponseEntity.ok(Map.of("message","ALL_ATTENDANCE_DELETED_SUCCESSFULLY"));
+    }
 }

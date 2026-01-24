@@ -12,17 +12,16 @@ a:hover {
 /* OTP Section */
 .register-otp {
   display: flex;
-  gap: 5%;
   align-items:end;
 }
 
 .otpClass {
-  width:60%;
+  width:50%;
 }
 
 .otpBtnClass {
   height: 41px;
-  width:35%;
+  width:50%;
   background: var(--dark);
   color: var(--light);
   border-radius: 8px;

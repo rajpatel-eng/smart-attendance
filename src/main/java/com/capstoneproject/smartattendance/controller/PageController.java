@@ -23,6 +23,10 @@ public class PageController {
     public String forgotPasswordPage() {
         return "forgot-password"; 
     }
+    @GetMapping({"/admin/academic"})
+    public String academic() {
+        return "admin-academic"; 
+    }
 }
 
 

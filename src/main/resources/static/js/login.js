@@ -17,7 +17,6 @@ function setRole(role) {
     if (role === 'teacher') {
         teacherBtn.classList.add('active');
         boxTitle.textContent = 'Teacher Login';
-        userId.placeholder = 'Enter Teacher Id';
         forgotLink.style.display = 'none';
         registerBtn.style.display = 'none';
         errorBoxId.style.display = 'none'
@@ -27,7 +26,6 @@ function setRole(role) {
     } else if (role === 'admin') {
         adminBtn.classList.add('active');
         boxTitle.textContent = 'Admin Login';
-        userId.placeholder = 'Enter Admin Id';
         forgotLink.style.display = 'inline-block';
         registerBtn.style.display = 'inline-block';
         errorBoxId.style.display = 'none'
@@ -98,7 +96,7 @@ async function login() {
 
             setTimeout(() => {
                 if (data.role === 'ADMIN') {
-                    window.location.href = "/admin/dashboard";
+                    window.location.href = "/admin/academic";
                 }else if(data.role === 'TEACHER'){
                     window.location.href = "/teacher/dashboard";
                 }

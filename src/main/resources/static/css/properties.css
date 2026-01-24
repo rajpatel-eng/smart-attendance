@@ -1,0 +1,14 @@
+:root {
+  --dark:#1B263B;
+  --midDark:  #354a75;  /* softened dark (derived from dark) */
+  --midLight:#eeeeee;
+  --light:#ffffff;
+
+  --grey:#e5e7eb;
+
+  --success: #16a34a;
+  --error: #dc2626;
+  --warning: #f59e0b;
+
+  --text : Arial, Helvetica, sans-serif;
+}

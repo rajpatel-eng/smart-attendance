@@ -31,6 +31,7 @@ import com.capstoneproject.smartattendance.exception.ErrorCode;
 
 import com.capstoneproject.smartattendance.repository.AcademicRepo;
 import com.capstoneproject.smartattendance.repository.AdminRepo;
+import com.capstoneproject.smartattendance.repository.AttendanceRepo;
 import com.capstoneproject.smartattendance.repository.StudentRepo;
 import com.capstoneproject.smartattendance.repository.TeacherRepo;
 import com.capstoneproject.smartattendance.repository.UserRepo;
@@ -62,6 +63,8 @@ public class AdminService {
 
     private final OtpService otpService;
 
+    private final AttendanceRepo attendanceRepo;
+
     @Value("${app.file.base-url}")
     private String fileBaseUrl;
 
@@ -75,7 +78,11 @@ public class AdminService {
 
         List<AcademicDto> response = admin.getAcademicDatas()
                 .stream()
-                .map(a -> modelMapper.map(a, AcademicDto.class))
+                .map(a ->{
+                        AcademicDto res = modelMapper.map(a, AcademicDto.class);
+                        res.setStudentCount(a.getStudents().size());
+                        return res;
+                    })
                 .toList();
 
         return response;
@@ -505,4 +512,17 @@ public class AdminService {
 
     }
 
+    @Transactional
+    public void deleteAllAttendanceService(String adminId,String otp){
+        if (otp == null) {
+            throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
+        }
+        Admin admin  = adminRepo.findById(adminId)
+                .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
+        otpService.verifyOtp(admin.getEmail(),otp);
+
+        for (Teacher teacher : admin.getTeachers()){
+            attendanceRepo.deleteByTeacher(teacher);
+        }         
+    }
 }

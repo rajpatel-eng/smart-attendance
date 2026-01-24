@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Smart Attendance Register</title>
-  <link rel="stylesheet" href="/css/colors.css">
+  <link rel="stylesheet" href="/css/properties.css">
   <link rel="stylesheet" href="/css/authBase.css">
   <link rel="stylesheet" href="/css/registerForgotPass.css">
   <link rel="stylesheet" href="/css/snackbar.css">
@@ -13,7 +13,7 @@
 </head>
 
 <body>
-  
+
   <div class="logo-card">
     <div class="logo-image">
       <img src="/assets/images/website-logo.png">
@@ -30,36 +30,52 @@
 
 
       <form id="registerForm">
-        <input type="text" id="userId" placeholder="Enter admin id" required>
+        <div class="field">
+          <input type="text" id="userId" required />
+          <label>Enter admin id</label>
+        </div>
         <div id="errorBoxUserId" class="errorbox"></div>
-
-        <input type="text" id="name" placeholder="Enter your name" required>
+        <div class="field">
+          <input type="text" id="name" required />
+          <label>Enter your name</label>
+        </div>
         <div id="errorBoxName" class="errorbox" style="display:none;"></div>
-
-        <input type="email" id="email" placeholder="Enter email id" required>
+        <div class="field">
+          <input type="text" id="email" required />
+          <label>Enter email id</label>
+        </div>
         <div id="errorBoxEmail" class="errorbox" style="display:none;"></div>
 
         <div class="register-otp">
-          <input type="text" id="otp" class="otpClass" placeholder="Enter OTP" required>
+          <div class="field">
+            <input type="text" id="otp" class="otpClass" required />
+            <label>Enter OTP</label>
+          </div>
           <button type="button" id="otpBtn" class="otpBtnClass">Send OTP</button>
         </div>
 
         <div id="errorBoxOtp" class="errorbox" style="display:none;"></div>
-
-        <input type="text" id="collegeName" placeholder="Enter college name" required>
+        <div class="field">
+          <input type="text" id="collegeName" class="otpClass" required />
+          <label>Enter college name</label>
+        </div>
         <div id="errorBoxCollegeName" class="errorbox"></div>
 
         <div class="password-wrapper">
-          <input type="password" id="password" placeholder="Enter password" required>
-
+          <div class="field">
+            <input type="password" id="password" required />
+            <label>Enter password</label>
+          </div>
           <span class="password-toggle" onclick="togglePassword('password', this)">
             <img src="/assets/icons/eye.svg" class="eye-icon" alt="toggle password">
           </span>
         </div>
 
         <div id="errorBoxPwd" class="errorbox"></div>
-
-        <input type="password" id="confirmPassword" placeholder="Confirm password" required>
+        <div class="field">
+          <input type="password" id="confirmPassword" required />
+          <label>Confirm password</label>
+        </div>
         <div id="errorBoxCnfmPwd" class="errorbox"></div>
 
 
