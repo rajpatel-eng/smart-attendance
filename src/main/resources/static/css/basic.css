@@ -65,9 +65,20 @@
 }
 
 
+form {
+  display: flex;
+  flex-direction: column;
+  margin-top:-10px;
+}
+
+/* Inputs */
+
+
+
+
 
 input {
-  width: 120px;
+  width:50%;
   padding: 11px;
   margin-top: 14px;
   border-radius: 5px;
@@ -80,13 +91,47 @@ input:focus {
   border: 2px solid var(--dark);
 }
 
-
-
-.field {
+.password-wrapper {
   position: relative;
-  display: inline-block;
 }
 
+.password-wrapper input {
+  width: 100%;
+  padding-right: 40px; /* space for icon */
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eye-icon {
+  width: 18px;
+  height: 18px;
+  fill: var(--midDark);
+  margin-top: 12px;
+}
+
+.password-toggle:hover .eye-icon {
+  fill: var(--dark);
+}
+
+.field {
+  width:93%;
+  position: relative;
+  display: inline-block;
+  margin-right: 18px;
+}
+
+.field input {
+  width: 100%;
+}
 
 .field label {
   position: absolute;
@@ -103,8 +148,11 @@ input:focus {
 
 /* Floating label */
 .field input:focus + label,
-.field input:valid + label {
+.field input:valid + label,
+.custom-dropdown input:focus + label,
+.custom-dropdown input.filled + label {
   top: 14px;
   font-size: 11px;
   color:var(--dark);
 }
+

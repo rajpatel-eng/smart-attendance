@@ -1,0 +1,44 @@
+.border{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contentbody{
+  margin-top:-25px;
+    height:95%;
+    width:25%;
+}
+input{
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+.options {
+  width:100%;
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  border: 1px solid var(--grey);
+  border-radius: 5px;
+  display: none;
+  position: absolute;
+  background: var(--light);
+  max-height: 130px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.options li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.options li:hover {
+  background:var(--midLight);
+}
+
+.darkBtn{
+   margin-top:20px;
+   width:50%;
+   margin-left: auto;
+   margin-right: auto;
+}

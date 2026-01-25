@@ -27,6 +27,10 @@ public class PageController {
     public String academic() {
         return "admin-academic"; 
     }
+    @GetMapping({"/admin/student/add"})
+    public String addStudent() {
+        return "add-student"; 
+    }
 }
 
 

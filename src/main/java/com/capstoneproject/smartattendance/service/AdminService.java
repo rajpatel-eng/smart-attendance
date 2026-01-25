@@ -234,7 +234,7 @@ public class AdminService {
         student.setAdmin(admin);
         student.setCollegeName(admin.getCollegeName());
         student.setAcademic(academic);
-        student.setCurImage("deafultimage.jpg");
+        student.setCurImage("defaultimage.jpg");
         student.setPassword(passwordEncoder.encode(password));
 
         adminMailService.sendStudentDetailsMail(student, adminId, "created");
