@@ -134,6 +134,9 @@ public class TeacherService {
         if(attendanceId==null){
             throw new CustomeException(ErrorCode.ALL_FIELD_REQUIRED);
         }
+        if(refreshTime==0){
+            refreshTime=3;
+        }
         teacherRepo.findById(teacherId)
                         .orElseThrow(() -> new CustomeException(ErrorCode.USER_NOT_FOUND));
 

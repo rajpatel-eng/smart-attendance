@@ -303,7 +303,7 @@ updateStudentBtn.onclick = async () => {
 
     updateStudentBtn.textContent = "Update Student";
     updateStudentBtn.disabled = false;
-
+    loadStudent();
 };
 
 

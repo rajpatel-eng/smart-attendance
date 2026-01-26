@@ -16,7 +16,6 @@ import lombok.Setter;
 public class QRDto {
 
     @NotNull(message = "ALL_FIELD_REQUIRED")
-    @NotBlank(message = "ALL_FIELD_REQUIRED")
     private UUID attendanceId; 
 
     @NotNull(message = "ALL_FIELD_REQUIRED")
@@ -24,10 +23,7 @@ public class QRDto {
     private String encryptedCode;
 
     @NotNull(message = "ALL_FIELD_REQUIRED")
-    @NotBlank(message = "ALL_FIELD_REQUIRED")
     private Long expireTime;
 
-    @NotNull(message = "ALL_FIELD_REQUIRED")
-    @NotBlank(message = "ALL_FIELD_REQUIRED")
     private int refreshTime;
 }

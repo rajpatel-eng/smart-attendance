@@ -38,9 +38,14 @@ public class PageController {
         return "add-teacher"; 
     }
     @GetMapping({"/admin/student/{enrollmentNo}"})
-    public String updateStudentrPage(@PathVariable String enrollmentNo,Model model) {
+    public String updateStudentPage(@PathVariable String enrollmentNo,Model model) {
         model.addAttribute("enrollmentNo",enrollmentNo);
         return "update-student"; 
+    }
+    @GetMapping({"/admin/teacher/{teacherId}"})
+    public String updateTeacherPage(@PathVariable String teacherId,Model model) {
+        model.addAttribute("teacherId",teacherId);
+        return "update-teacher"; 
     }
 }
 
