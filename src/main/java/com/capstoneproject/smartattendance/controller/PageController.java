@@ -1,7 +1,9 @@
 package com.capstoneproject.smartattendance.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 
 @Controller
@@ -34,6 +36,11 @@ public class PageController {
     @GetMapping({"/admin/teacher/add"})
     public String addTeacherPage() {
         return "add-teacher"; 
+    }
+    @GetMapping({"/admin/student/{enrollmentNo}"})
+    public String updateStudentrPage(@PathVariable String enrollmentNo,Model model) {
+        model.addAttribute("enrollmentNo",enrollmentNo);
+        return "update-student"; 
     }
 }
 

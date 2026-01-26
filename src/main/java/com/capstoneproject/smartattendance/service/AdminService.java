@@ -241,7 +241,7 @@ public class AdminService {
         student.setCurImage("defaultimage.jpg");
         student.setPassword(passwordEncoder.encode(password));
 
-        adminMailService.sendStudentDetailsMail(student, adminId, "created");
+        adminMailService.sendStudentDetailsMail(student, adminId,studentDto.getPassword(), "created");
         studentRepo.save(student);
     }
 
@@ -271,7 +271,7 @@ public class AdminService {
         student.setAcademic(academic);
         student.setPassword(passwordEncoder.encode(studentDto.getPassword()));
 
-        adminMailService.sendStudentDetailsMail(student, adminId, "updated");
+        adminMailService.sendStudentDetailsMail(student, adminId,studentDto.getPassword(), "updated");
         studentRepo.save(student);
     }
 
@@ -395,7 +395,7 @@ public class AdminService {
         teacher.setCollegeName(admin.getCollegeName());
         teacher.setPassword(passwordEncoder.encode(password));
 
-        adminMailService.sendTeacherDetailsMail(teacher, adminId, "created");
+        adminMailService.sendTeacherDetailsMail(teacher, adminId,teacherDto.getPassword(), "created");
         teacherRepo.save(teacher);
     }
 
@@ -417,7 +417,7 @@ public class AdminService {
         teacher.setAdmin(admin);
         teacher.setPassword(passwordEncoder.encode(password));
 
-        adminMailService.sendTeacherDetailsMail(teacher, adminId, "updated");
+        adminMailService.sendTeacherDetailsMail(teacher, adminId,teacherDto.getPassword(),"updated");
         teacherRepo.save(teacher);
         
     }

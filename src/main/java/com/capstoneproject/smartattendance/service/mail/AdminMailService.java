@@ -14,7 +14,7 @@ public class AdminMailService {
 
     private final MailSenderService mailSenderService;
 
-    public void sendStudentDetailsMail(Student student, String adminId,String type) {
+    public void sendStudentDetailsMail(Student student, String adminId,String password,String type) {
 
         String subject = "Student Account "+type+" – Smart Attendance System";
 
@@ -25,7 +25,7 @@ public class AdminMailService {
 
                 "================ ACCOUNT CREDENTIALS ================\n" +
                 "User ID   : " + student.getUserId() + "\n" +
-                "Password  : " + student.getPassword() + "\n\n" +
+                "Password  : " + password + "\n\n" +
 
                 "================ STUDENT DETAILS =====================\n" +
                 "Name           : " + student.getName() + "\n" +
@@ -52,7 +52,7 @@ public class AdminMailService {
         );
     }
 
-    public void sendTeacherDetailsMail(Teacher teacher, String adminId, String type) {
+    public void sendTeacherDetailsMail(Teacher teacher, String adminId,String password, String type) {
        String subject = "Teacher Account "+type+" – Smart Attendance System";
 
         String body =
@@ -62,7 +62,7 @@ public class AdminMailService {
 
                 "================ ACCOUNT CREDENTIALS ================\n" +
                 "User ID   : " + teacher.getUserId() + "\n" +
-                "Password  : " + teacher.getPassword() + "\n\n" +
+                "Password  : " + password + "\n\n" +
 
                 "================ STUDENT DETAILS =====================\n" +
                 "Name           : " + teacher.getName() + "\n" +
